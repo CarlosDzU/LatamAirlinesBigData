@@ -140,7 +140,7 @@ En AWS:
 
 ```bash
 make base-apply             # lake, catálogo, orquestación y alertas (una vez)
-make salt                   # salt de seudonimización en SSM
+make salt                   # parámetro reservado en SSM (hoy no hay datos personales que seudonimizar)
 make compute-up WORKERS=1   # clúster Spark
 make sync                   # publica el código en el bucket
 make pipeline               # ingesta, silver, gold, modelos, predicciones, KPI, valor y catálogo
