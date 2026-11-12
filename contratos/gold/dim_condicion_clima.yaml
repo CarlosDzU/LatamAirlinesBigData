@@ -1,0 +1,14 @@
+nombre: dim_condicion_clima
+zona: gold
+descripcion: Categoría de vuelo por techo y visibilidad
+columnas:
+- nombre: condicion_clima_key
+  tipo: string
+- nombre: categoria_vuelo
+  tipo: string
+- nombre: descripcion
+  tipo: string
+- nombre: techo_ft_min
+  tipo: integer
+- nombre: vis_m_min
+  tipo: integer

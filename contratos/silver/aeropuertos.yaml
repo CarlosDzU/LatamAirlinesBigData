@@ -1,0 +1,10 @@
+nombre: aeropuertos
+zona: silver
+descripcion: "Aeródromos observados en VRA con su volumen y cobertura METAR"
+columnas:
+  - {nombre: icao, tipo: string, nulo: false}
+  - {nombre: pais_prefijo, tipo: string}
+  - {nombre: es_brasil, tipo: boolean}
+  - {nombre: n_salidas_latam, tipo: long}
+  - {nombre: n_llegadas_latam, tipo: long}
+  - {nombre: tiene_metar, tipo: boolean}

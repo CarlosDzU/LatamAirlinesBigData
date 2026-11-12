@@ -1,0 +1,42 @@
+services:
+  tests:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.tests
+    image: latam-ops-tests:1.0
+    working_dir: /app
+    volumes:
+      - ..:/app
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      HOME: /tmp
+      LATAM_MODO: local
+      PYTHONPATH: /app/src
+    command: ["pytest", "-q"]
+
+  pipeline:
+    image: latam-ops-tests:1.0
+    working_dir: /app
+    volumes:
+      - ..:/app
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      HOME: /tmp
+      LATAM_MODO: local
+      PYTHONPATH: /app/src
+    command: ["python", "-m", "latam_ops.orquestacion.pipeline_local"]
+
+  jupyter:
+    image: latam-ops-tests:1.0
+    working_dir: /app
+    volumes:
+      - ..:/app
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      HOME: /tmp
+      LATAM_MODO: local
+      PYTHONPATH: /app/src
+      LATAM_LAKE_LOCAL: /app/data/lake_muestra
+    ports:
+      - "127.0.0.1:8888:8888"
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--ServerApp.token=", "--notebook-dir=/app/notebooks"]

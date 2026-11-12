@@ -1,0 +1,8 @@
+escalon,nodos,factor,desde,hasta,estado,filas_entrada,filas_salida,bytes_entrada,segundos_replica,segundos_pipeline,pico_heap_executor_bytes,detalle
+E4,2,10,2024-01,2024-12,ok,9560490,2779655,507806505,340.75,208.9,1873488000,
+E1,2,1,2024-01,2024-01,ok,82367,23519,4365094,,18.61,673290888,
+E2,2,1,2024-01,2024-12,ok,956049,275823,50723584,,42.42,957267960,
+E3,2,1,2023-01,2025-12,ok,2879793,844014,152360697,,78.66,1730257856,
+E6x1,0,1,2024-01,2024-12,ok,956049,281211,,,4.34,941797376,
+E5,2,100,2024-01,2024-12,timeout,95604900,,5081346042,,3600,,no termino en 60 min: la replica de 5.1 GB se escribio pero el commit en S3 (copiar y borrar archivo por archivo) consumio el tiempo; punto de quiebre del cluster de 2 nodos
+E6x10,0,10,2024-01,2024-12,ok,9560490,2812110,,,45.62,5356531712,

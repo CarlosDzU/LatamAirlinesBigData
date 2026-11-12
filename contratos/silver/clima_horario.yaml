@@ -1,0 +1,26 @@
+nombre: clima_horario
+zona: silver
+descripcion: "Grilla horaria por estación: el valor de la hora k es la última observación ESTRICTAMENTE anterior a k (ffill <= 3 h)"
+particiones: [year, month]
+columnas:
+  - {nombre: estacion, tipo: string, nulo: false}
+  - {nombre: k, tipo: timestamp, nulo: false}
+  - {nombre: obs_utc, tipo: timestamp}
+  - {nombre: horas_desde_obs, tipo: double}
+  - {nombre: viento_kt, tipo: integer}
+  - {nombre: rafaga_kt, tipo: integer}
+  - {nombre: vis_m, tipo: integer}
+  - {nombre: techo_ft, tipo: integer}
+  - {nombre: temp_c, tipo: integer}
+  - {nombre: spread_t_td, tipo: integer}
+  - {nombre: qnh_hpa, tipo: double}
+  - {nombre: presion_tendencia_3h, tipo: double}
+  - {nombre: vis_cambio_3h, tipo: double}
+  - {nombre: fen_niebla, tipo: integer}
+  - {nombre: fen_neblina, tipo: integer}
+  - {nombre: fen_lluvia, tipo: integer}
+  - {nombre: fen_tormenta, tipo: integer}
+  - {nombre: tiene_tempo, tipo: integer}
+  - {nombre: categoria_vuelo, tipo: string}
+  - {nombre: year, tipo: integer, nulo: false}
+  - {nombre: month, tipo: integer, nulo: false}

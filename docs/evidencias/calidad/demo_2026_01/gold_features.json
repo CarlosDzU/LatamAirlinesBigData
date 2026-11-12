@@ -1,0 +1,37 @@
+{
+  "run_id": "20261112T022428Z-63440c",
+  "tabla": "gold_features",
+  "reglas": [
+    {
+      "codigo": "G1",
+      "descripcion": "filas en gold/features_salida",
+      "valor": 27763,
+      "umbral": "> 0",
+      "cumple": true,
+      "critica": true,
+      "detalle": ""
+    },
+    {
+      "codigo": "G2",
+      "descripcion": "% vuelos con clima de origen a T-2 h",
+      "valor": 97.4462,
+      "umbral": ">= 90",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "G3",
+      "descripcion": "tasa de demora >= 15 (informativa)",
+      "valor": 0.2183,
+      "umbral": "informativa",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    }
+  ],
+  "cumple_todo": true,
+  "desde": "2026-01",
+  "hasta": "2026-01",
+  "pct_calidad": 100.0
+}

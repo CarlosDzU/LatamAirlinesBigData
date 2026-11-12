@@ -1,0 +1,11 @@
+optimizacion,variante,segundos,executorRunTime,shuffleReadBytes,shuffleWriteBytes,memoryBytesSpilled,diskBytesSpilled,inputBytes,stages
+O1,sort_merge_join,17.769,50464,254702061,254702061,0,0,138448732,3
+O1,broadcast_join,4.908,15792,0,0,0,0,138448732,2
+O2,lectura_completa_filtro_tardio,5.49,13209,12746,12746,0,0,13202160,3
+O2,poda_particiones_y_columnas,1.914,514,12746,12746,0,0,174526,3
+O3,sin_cache,6.523,21964,33895,33895,0,0,4101900,6
+O3,con_cache,1.789,2450,33895,33895,0,0,356622456,6
+O4,ventana_sin_repartition,7.464,27881,250869207,250869207,0,0,138231197,2
+O4,ventana_con_repartition,6.175,22798,250869207,250869207,0,0,138231197,2
+O5,escritura_silver_sin_repartition,900,,,,,,,
+O5,escritura_silver_con_repartition,131.62,,,,,,,

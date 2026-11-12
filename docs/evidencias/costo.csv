@@ -1,0 +1,9 @@
+concepto,cantidad,unidad,precio_unitario_usd,costo_usd,nota
+EC2 m7i-flex.large (master + 1 worker),5.79,horas-instancia,0.0958,0.55,2 nodos de 23:46 a 02:40 UTC (2.89 h); precio on-demand us-east-1 sin verificar en factura
+IPv4 publica,5.79,horas-IP,0.005,0.03,una IP por nodo
+EBS gp3 30 GB x2,0.0080,GB-mes aprox,0.08,0.02,prorrateado por horas
+Glue crawler,2,ejecuciones,0.15,0.29,minimo facturable 10 min a 0.44 USD/DPU-h (estimado)
+Athena,0.002,TB escaneados,5.00,0.01,consultas de validacion y tablero
+S3 almacenamiento y solicitudes,2.4,GB,0.023,0.10,incluye copias del commit de E5 (5 GB temporales borrados)
+CloudWatch, Step Functions, EventBridge, SNS,1,mes,0.00,0.00,dentro de la capa gratuita
+TOTAL estimado,,,,1.00,Cost Explorer no esta habilitado en la cuenta; cifra estimada por horas de uso. Credito del plan Free intacto en la consola (120 USD)

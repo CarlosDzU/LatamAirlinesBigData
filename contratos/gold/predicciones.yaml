@@ -1,0 +1,29 @@
+nombre: predicciones
+zona: gold
+descripcion: Probabilidades y nivel de alerta por vuelo y versión de modelo
+particiones:
+- year
+- month
+columnas:
+- nombre: id_vuelo
+  tipo: string
+- nombre: modelo
+  tipo: string
+- nombre: version
+  tipo: string
+- nombre: prob_demora15
+  tipo: double
+- nombre: prob_demora60
+  tipo: double
+- nombre: umbral_ambar
+  tipo: double
+- nombre: umbral_rojo
+  tipo: double
+- nombre: nivel_alerta
+  tipo: string
+- nombre: split
+  tipo: string
+- nombre: year
+  tipo: integer
+- nombre: month
+  tipo: integer

@@ -1,0 +1,35 @@
+nombre: metar_obs
+zona: silver
+descripcion: "METAR parseado (texto no estructurado -> columnas)"
+particiones: [year, month]
+columnas:
+  - {nombre: estacion, tipo: string, nulo: false}
+  - {nombre: obs_utc, tipo: timestamp, nulo: false}
+  - {nombre: tipo_reporte, tipo: string}
+  - {nombre: viento_dir, tipo: integer}
+  - {nombre: viento_variable, tipo: boolean}
+  - {nombre: viento_kt, tipo: integer}
+  - {nombre: rafaga_kt, tipo: integer}
+  - {nombre: vis_m, tipo: integer}
+  - {nombre: cavok, tipo: boolean}
+  - {nombre: techo_ft, tipo: integer}
+  - {nombre: nube_min_ft, tipo: integer}
+  - {nombre: temp_c, tipo: integer}
+  - {nombre: rocio_c, tipo: integer}
+  - {nombre: qnh_hpa, tipo: double}
+  - {nombre: fen_niebla, tipo: integer}
+  - {nombre: fen_neblina, tipo: integer}
+  - {nombre: fen_bruma, tipo: integer}
+  - {nombre: fen_lluvia, tipo: integer}
+  - {nombre: fen_llovizna, tipo: integer}
+  - {nombre: fen_chubasco, tipo: integer}
+  - {nombre: fen_tormenta, tipo: integer}
+  - {nombre: fen_nieve, tipo: integer}
+  - {nombre: fenomenos, tipo: string}
+  - {nombre: tendencia, tipo: string}
+  - {nombre: tiene_tempo, tipo: integer}
+  - {nombre: categoria_vuelo, tipo: string}
+  - {nombre: parseado_ok, tipo: boolean}
+  - {nombre: metar, tipo: string}
+  - {nombre: year, tipo: integer, nulo: false}
+  - {nombre: month, tipo: integer, nulo: false}

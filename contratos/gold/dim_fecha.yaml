@@ -1,0 +1,22 @@
+nombre: dim_fecha
+zona: gold
+descripcion: Calendario
+columnas:
+- nombre: fecha_key
+  tipo: integer
+- nombre: fecha
+  tipo: date
+- nombre: anio
+  tipo: integer
+- nombre: mes
+  tipo: integer
+- nombre: dia
+  tipo: integer
+- nombre: dia_semana
+  tipo: integer
+- nombre: nombre_dia
+  tipo: string
+- nombre: es_fin_de_semana
+  tipo: integer
+- nombre: trimestre
+  tipo: integer

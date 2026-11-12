@@ -1,0 +1,92 @@
+#!/bin/bash
+# Arranque del master: Spark master + worker local (funciona con worker_count = 0),
+# History Server, JupyterLab en 127.0.0.1 (acceso solo por tunel SSM).
+${bootstrap_comun}
+
+# --- Configuracion de Spark --------------------------------------------------
+cat > /opt/spark/conf/spark-defaults.conf <<'CONF'
+${spark_defaults}
+CONF
+sed -i "s/__MASTER_IP__/$IP_PRIVADA/" /opt/spark/conf/spark-defaults.conf
+
+cat > /opt/spark/conf/spark-env.sh <<ENV
+export SPARK_MASTER_HOST=$IP_PRIVADA
+export SPARK_LOCAL_IP=$IP_PRIVADA
+export SPARK_WORKER_MEMORY=${memoria_worker}
+export SPARK_WORKER_CORES=${executor_cores}
+export SPARK_LOCAL_DIRS=/mnt/spark-tmp
+export PYSPARK_PYTHON=python3.11
+export SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=s3a://${bucket}/logs/spark-events/ -Dspark.history.ui.port=18080"
+ENV
+chown ec2-user:ec2-user /opt/spark/conf/spark-defaults.conf /opt/spark/conf/spark-env.sh
+
+# Datos que leen los jobs y scripts/ejecutar_paso.sh
+cat >> /etc/profile.d/latam_ops.sh <<VARS
+export SPARK_MASTER_URL=spark://$IP_PRIVADA:7077
+export LATAM_LOG_GROUP="${log_group_jobs}"
+export LATAM_SNS_TOPIC="${sns_topic_arn}"
+export LATAM_CRAWLER="${crawler_name}"
+export LATAM_RUTA_SALT="${ruta_salt}"
+VARS
+
+# El History Server exige que el directorio de eventos exista
+aws s3api put-object --bucket "${bucket}" --key "logs/spark-events/" >/dev/null
+
+# --- JupyterLab (solo loopback) ------------------------------------------------
+if ! hecho jupyter; then
+  python3.11 -m pip install --quiet jupyterlab
+  marcar jupyter
+fi
+
+# --- Servicios systemd ------------------------------------------------------
+servicio() {
+  cat > "/etc/systemd/system/$1.service" <<UNIT
+[Unit]
+Description=$2
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=ec2-user
+EnvironmentFile=-/etc/latam-ops.env
+ExecStart=$3
+ExecStop=$4
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+}
+# Variables de entorno en formato systemd (sin "export")
+sed -e 's/^export //' /etc/profile.d/latam_ops.sh | grep -v 'PATH=' > /etc/latam-ops.env
+
+servicio spark-master  "Spark master"         "/opt/spark/sbin/start-master.sh"                       "/opt/spark/sbin/stop-master.sh"
+servicio spark-worker  "Spark worker (local)" "/opt/spark/sbin/start-worker.sh spark://$IP_PRIVADA:7077" "/opt/spark/sbin/stop-worker.sh"
+servicio spark-history "Spark History Server" "/opt/spark/sbin/start-history-server.sh"               "/opt/spark/sbin/stop-history-server.sh"
+
+# Jupyter sin token: solo escucha en 127.0.0.1 y unicamente se alcanza con un tunel SSM (IAM + MFA).
+cat > /etc/systemd/system/jupyter.service <<'UNIT'
+[Unit]
+Description=JupyterLab (127.0.0.1:8888)
+After=network-online.target
+
+[Service]
+User=ec2-user
+EnvironmentFile=-/etc/latam-ops.env
+WorkingDirectory=/opt/proyecto
+ExecStart=/usr/bin/python3.11 -m jupyterlab --ip=127.0.0.1 --port=8888 --no-browser --ServerApp.token= --ServerApp.password=
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+systemctl daemon-reload
+systemctl enable --now spark-master
+systemctl enable --now spark-worker
+systemctl enable --now spark-history
+systemctl enable --now jupyter
+
+marcar bootstrap_ok
+echo "[bootstrap] master listo $(date -Is)"

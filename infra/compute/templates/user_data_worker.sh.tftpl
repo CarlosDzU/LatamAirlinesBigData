@@ -1,0 +1,43 @@
+#!/bin/bash
+# Arranque de un worker: se registra en el master por su IP privada.
+${bootstrap_comun}
+
+cat > /opt/spark/conf/spark-defaults.conf <<'CONF'
+${spark_defaults}
+CONF
+sed -i "s/__MASTER_IP__/${master_ip_privada}/" /opt/spark/conf/spark-defaults.conf
+
+cat > /opt/spark/conf/spark-env.sh <<ENV
+export SPARK_LOCAL_IP=$IP_PRIVADA
+export SPARK_WORKER_MEMORY=${memoria_worker}
+export SPARK_WORKER_CORES=${executor_cores}
+export SPARK_LOCAL_DIRS=/mnt/spark-tmp
+export PYSPARK_PYTHON=python3.11
+ENV
+chown ec2-user:ec2-user /opt/spark/conf/spark-defaults.conf /opt/spark/conf/spark-env.sh
+
+sed -e 's/^export //' /etc/profile.d/latam_ops.sh | grep -v 'PATH=' > /etc/latam-ops.env
+
+cat > /etc/systemd/system/spark-worker.service <<'UNIT'
+[Unit]
+Description=Spark worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=ec2-user
+EnvironmentFile=-/etc/latam-ops.env
+ExecStart=/opt/spark/sbin/start-worker.sh spark://${master_ip_privada}:7077
+ExecStop=/opt/spark/sbin/stop-worker.sh
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+systemctl daemon-reload
+systemctl enable --now spark-worker
+
+marcar bootstrap_ok
+echo "[bootstrap] worker listo $(date -Is)"

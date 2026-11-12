@@ -1,0 +1,139 @@
+# Contrato único de rutas, periodos y parámetros. Ningún módulo tiene rutas hardcodeadas.
+proyecto: latam-ops
+
+lake:
+  bucket_env: LAKE_BUCKET          # nombre del bucket (modo aws)
+  raiz_local: data/lake            # raíz del lake en modo local
+  bronze: bronze
+  silver: silver
+  gold: gold
+  landing: bronze/landing          # zona de aterrizaje que dispara la demo / streaming
+  scale_test: scale-test           # réplicas para la prueba de escalabilidad (no se usan en EDA ni ML)
+
+tablas:
+  bronze_vra: bronze/anac_vra
+  bronze_metar: bronze/metar_iem
+  manifiestos: bronze/_manifests
+  silver_vuelos: silver/vuelos
+  silver_metar: silver/metar_obs
+  silver_clima_horario: silver/clima_horario
+  silver_aeropuertos: silver/aeropuertos
+  silver_calidad: silver/_calidad
+  gold_features: gold/features_salida
+  gold_predicciones: gold/predicciones
+  gold_fact_vuelo: gold/fact_vuelo
+  gold_dim_fecha: gold/dim_fecha
+  gold_dim_aeropuerto: gold/dim_aeropuerto
+  gold_dim_aerolinea: gold/dim_aerolinea
+  gold_dim_condicion_clima: gold/dim_condicion_clima
+  gold_dim_ruta: gold/dim_ruta
+  gold_kpi_diario: gold/kpi_diario
+  gold_kpi_alerta_mensual: gold/kpi_alerta_mensual
+  gold_monitoreo: gold/monitoreo_deriva
+  gold_modelos: gold/modelos
+  gold_metricas: gold/metricas
+
+periodo:
+  inicio: "2023-01"
+  fin: "2025-12"
+  demo: "2026-01"                   # reservado: nunca entra a train/valid/test
+
+split:
+  train_fin: "2024-06"
+  valid_fin: "2024-12"
+  test_fin: "2025-12"
+
+horizonte_horas: 2                  # T-2 h
+ventana_red_horas: 2                # estado de la red observado en [T-4h, T-2h)
+zona_horaria_vra: America/Sao_Paulo # ANAC publica en hora de Brasília (UTC-3 fijo desde 2019)
+umbrales_demora_min: {ambar: 15, rojo: 60}
+
+clima:
+  ffill_max_horas: 3
+
+calidad:
+  demora_min: -60
+  demora_max: 1440
+  cobertura_clima_min: 0.90
+
+modelo:
+  objetivo_principal: y_demora15
+  objetivos: [y_demora15, y_demora60]
+  semilla: 42
+  costo_fp: 1.0
+  razones_cfn_cfp: [3, 5, 10]
+  grilla_rf: {numTrees: [50, 100], maxDepth: [6, 10]}
+  grilla_gbt: {maxIter: [40, 80], maxDepth: [5], stepSize: [0.1]}
+  top_aeropuertos_segmento: 10
+
+features:
+  numericas:
+    - hora_local
+    - dia_semana
+    - mes
+    - es_fin_de_semana
+    - congestion_hora_origen
+    - congestion_dia_origen
+    - red_n_salidas
+    - red_demora_media
+    - red_frac_atrasadas
+    - red_n_llegadas_atrasadas
+    - prev_dia_demora
+    - prev_dia_conocido
+    - tasa_hist_origen_hora
+    - o_viento_kt
+    - o_rafaga_kt
+    - o_vis_m
+    - o_techo_ft
+    - o_temp_c
+    - o_spread_t_td
+    - o_qnh_hpa
+    - o_presion_tendencia_3h
+    - o_fen_niebla
+    - o_fen_neblina
+    - o_fen_lluvia
+    - o_fen_tormenta
+    - o_tiene_tempo
+    - o_horas_desde_obs
+    - d_viento_kt
+    - d_vis_m
+    - d_techo_ft
+    - d_fen_niebla
+    - d_fen_lluvia
+    - d_fen_tormenta
+    - clima_disponible
+  categoricas:
+    - empresa_icao
+    - origen_icao
+    - destino_icao
+    - tipo_linha
+    - o_categoria_vuelo
+
+spark:
+  app_prefijo: latam-ops
+  particiones_shuffle_local: 8
+
+evidencias:
+  dir_local: docs/evidencias
+
+# Valor de negocio (ml/valor_negocio.py). Las cifras con fuente se citan; el resto son supuestos ajustables.
+valor_negocio:
+  razon_principal: 5               # razón C_FN/C_FP con la que opera la alerta ámbar
+  linea_base:
+    otp_cirium_2025: 82.40
+    fuente_otp: "Cirium, The On-Time Performance Review 2025 (02-ene-2026): LATAM 82,40 % de llegadas a tiempo en 580 707 vuelos"
+  costo_minuto_usd: 98.41
+  fuente_costo_minuto: >-
+    Airlines for America, U.S. Passenger Carrier Delay Costs (2025): costo directo promedio de un minuto de
+    block time, US$ 98,41 (tripulación 37,01; combustible 29,34; mantenimiento 18,35; propiedad 9,76; otros 3,95).
+    airlines.org/dataset/u-s-passenger-carrier-delay-costs, consultado el 11-nov-2026. Se usa como referencia
+    porque LATAM no publica su costo por minuto; EUROCONTROL / Univ. de Westminster (Cook y Tanner, 2015)
+    estima del orden de 100 EUR por minuto de demora ATFM en Europa.
+  escenarios:
+    pesimista: {fraccion_mitigable: 0.10, costo_accion_usd: 300}
+    base: {fraccion_mitigable: 0.20, costo_accion_usd: 150}
+    optimista: {fraccion_mitigable: 0.30, costo_accion_usd: 50}
+  nota_supuestos: >-
+    fraccion_mitigable (parte de la demora que se evita al actuar a T-2 h) y costo_accion_usd (revisar y
+    preparar un vuelo alertado) son supuestos propios sin fuente pública para LATAM; se ajustan con el CCO.
+    No se incluye el valor del tiempo del pasajero (A4A usa US$ 47 por hora) porque VRA no trae pasajeros por vuelo.

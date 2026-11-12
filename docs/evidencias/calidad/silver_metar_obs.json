@@ -1,0 +1,39 @@
+{
+  "run_id": "20261112T000709Z-39f307",
+  "tabla": "silver_metar_obs",
+  "reglas": [
+    {
+      "codigo": "M1",
+      "descripcion": "observaciones METAR en silver",
+      "valor": 2460397,
+      "umbral": "> 0",
+      "cumple": true,
+      "critica": true,
+      "detalle": ""
+    },
+    {
+      "codigo": "M2",
+      "descripcion": "% METAR parseados correctamente",
+      "valor": 96.5052,
+      "umbral": ">= 95",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "M3",
+      "descripcion": "estaciones con observaciones (informativa)",
+      "valor": 84,
+      "umbral": "informativa",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    }
+  ],
+  "cumple_todo": true,
+  "desde": "2023-01",
+  "hasta": "2025-12",
+  "filas_bronze": 2460417,
+  "pct_filas_ok": 96.5052,
+  "pct_calidad": 96.5052
+}

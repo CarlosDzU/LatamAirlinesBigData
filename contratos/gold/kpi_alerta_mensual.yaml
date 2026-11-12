@@ -1,0 +1,22 @@
+nombre: kpi_alerta_mensual
+zona: gold
+descripcion: 'K4: calidad de la alerta roja por mes'
+columnas:
+- nombre: anio_mes
+  tipo: string
+- nombre: modelo
+  tipo: string
+- nombre: version
+  tipo: string
+- nombre: vp
+  tipo: long
+- nombre: fp
+  tipo: long
+- nombre: fn
+  tipo: long
+- nombre: vn
+  tipo: long
+- nombre: k4_precision
+  tipo: double
+- nombre: k4_recall
+  tipo: double

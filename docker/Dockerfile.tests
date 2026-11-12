@@ -1,0 +1,25 @@
+# Entorno reproducible de pruebas y ejecución local: Python 3.11 + OpenJDK 17 + PySpark 3.5.x
+FROM python:3.11-slim-bookworm
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
+    PYTHONPATH=/app/src \
+    LATAM_MODO=local
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openjdk-17-jre-headless procps curl make git \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install -r requirements-dev.txt jupyterlab
+
+# Usuario sin privilegios (uid 1000): los archivos generados en el volumen quedan a nombre del usuario local.
+RUN useradd -m -u 1000 -s /bin/bash latam
+ENV HADOOP_USER_NAME=latam
+
+# El código se monta como volumen (docker-compose) para iterar sin reconstruir.
+CMD ["pytest", "-q"]

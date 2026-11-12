@@ -1,0 +1,10 @@
+# Valores del stack base. terraform.tfvars no se sube al repo.
+owner        = "carlos"
+alert_emails = ["correo@ejemplo.com"]
+
+# Opcionales
+# region            = "us-east-1"
+# budget_usd        = 100
+# force_destroy     = false      # true solo al cierre del curso
+# crear_oidc_github = true
+# github_repo       = "CarlosDzU/LatamAirlinesBigData"

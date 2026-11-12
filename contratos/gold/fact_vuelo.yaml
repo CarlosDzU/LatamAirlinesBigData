@@ -1,0 +1,47 @@
+nombre: fact_vuelo
+zona: gold
+descripcion: 'Grano: una salida programada de LATAM'
+particiones:
+- year
+- month
+columnas:
+- nombre: id_vuelo
+  tipo: string
+- nombre: fecha_key
+  tipo: integer
+- nombre: origen_key
+  tipo: string
+- nombre: destino_key
+  tipo: string
+- nombre: aerolinea_key
+  tipo: string
+- nombre: ruta_key
+  tipo: string
+- nombre: condicion_clima_key
+  tipo: string
+- nombre: numero_voo
+  tipo: string
+- nombre: hora_prog_local
+  tipo: integer
+- nombre: partida_prevista_utc
+  tipo: timestamp
+- nombre: dep_delay_min
+  tipo: double
+- nombre: es_demora15
+  tipo: integer
+- nombre: es_demora60
+  tipo: integer
+- nombre: cancelado
+  tipo: integer
+- nombre: llegada_previa_atrasada
+  tipo: integer
+- nombre: prob_demora15
+  tipo: double
+- nombre: prob_demora60
+  tipo: double
+- nombre: nivel_alerta
+  tipo: string
+- nombre: year
+  tipo: integer
+- nombre: month
+  tipo: integer

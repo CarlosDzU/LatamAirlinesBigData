@@ -1,0 +1,25 @@
+# Fuentes activas y parámetros de cada conector.
+anac_vra:
+  activa: true
+  entidad: "ANAC - Agência Nacional de Aviação Civil (Brasil)"
+  descripcion: "Voo Regular Ativo (VRA): un registro por vuelo con horarios previsto y real"
+  url_base: "https://sistemas.anac.gov.br/dadosabertos/Voos%20e%20opera%C3%A7%C3%B5es%20a%C3%A9reas/Voo%20Regular%20Ativo%20%28VRA%29"
+  # {anio}/{mes:02d} - {nombre_mes}/VRA_{anio}{mes}.csv  (mes sin cero en el nombre del archivo)
+  meses_pt: [Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro]
+  separador: ";"
+  codificacion: utf-8-sig
+  licencia: "Datos abiertos ANAC; citar la fuente (gov.br/anac)"
+  # Lista de respaldo si config/aerolineas_latam.yaml no existe.
+  empresas_latam_respaldo: [TAM, LAN, LPE, LCO, LTG, LXP, LNE, LAP, ARE, DSM]
+
+metar_iem:
+  activa: true
+  entidad: "Iowa Environmental Mesonet (Iowa State University) - archivo ASOS/METAR"
+  url: "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py"
+  pausa_seg: 6
+  reintentos: 5
+  # Estaciones fijas; además se agregan los aeródromos que aparecen en los vuelos LATAM.
+  estaciones_base: [SBGR, SBSP, SBBR, SBGL, SBRJ, SBKP, SBCF, SBPA, SBCT, SBSV, SBRF, SBFZ, SBFL, SBEG, SBBE, SCEL, SPJC]
+  licencia: "Datos públicos del archivo IEM; citar IEM y al servicio meteorológico de origen (DECEA/REDEMET)"
+
+user_agent: "latam-ops-academic/1.0"

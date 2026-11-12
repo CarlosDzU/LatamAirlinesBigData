@@ -1,0 +1,12 @@
+nombre: dim_aerolinea
+zona: gold
+descripcion: Empresas
+columnas:
+- nombre: aerolinea_key
+  tipo: string
+- nombre: empresa_icao
+  tipo: string
+- nombre: es_latam
+  tipo: boolean
+- nombre: grupo
+  tipo: string

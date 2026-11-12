@@ -1,0 +1,17 @@
+nombre: anac_vra
+zona: bronze
+descripcion: "CSV mensual ANAC VRA tal como se publica (separador ';', UTF-8 con BOM, primera línea 'Atualizado em')"
+formato: csv
+columnas:
+  - {nombre: empresa_icao, tipo: string, origen: "ICAO Empresa Aérea"}
+  - {nombre: numero_voo, tipo: string, origen: "Número Voo"}
+  - {nombre: codigo_di, tipo: string, origen: "Código Autorização (DI)"}
+  - {nombre: tipo_linha, tipo: string, origen: "Código Tipo Linha"}
+  - {nombre: origen_icao, tipo: string, origen: "ICAO Aeródromo Origem"}
+  - {nombre: destino_icao, tipo: string, origen: "ICAO Aeródromo Destino"}
+  - {nombre: partida_prevista, tipo: string, origen: "Partida Prevista"}
+  - {nombre: partida_real, tipo: string, origen: "Partida Real"}
+  - {nombre: chegada_prevista, tipo: string, origen: "Chegada Prevista"}
+  - {nombre: chegada_real, tipo: string, origen: "Chegada Real"}
+  - {nombre: situacao_voo, tipo: string, origen: "Situação Voo"}
+  - {nombre: codigo_justificativa, tipo: string, origen: "Código Justificativa"}

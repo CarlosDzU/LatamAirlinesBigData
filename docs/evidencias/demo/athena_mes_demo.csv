@@ -1,0 +1,4 @@
+tabla,year,month,vuelos,tasa15,rojas,ambar
+fact_vuelo,2025,1,25953,0.1619,472,9210
+fact_vuelo,2025,12,27466,0.3214,1023,14916
+fact_vuelo,2026,1,28495,0.2181,378,10652

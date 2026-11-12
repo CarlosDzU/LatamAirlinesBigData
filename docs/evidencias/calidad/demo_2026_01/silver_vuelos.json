@@ -1,0 +1,102 @@
+{
+  "run_id": "20261112T022247Z-064478",
+  "tabla": "silver_vuelos",
+  "reglas": [
+    {
+      "codigo": "Q1",
+      "descripcion": "filas en silver/vuelos",
+      "valor": 88948,
+      "umbral": "> 0",
+      "cumple": true,
+      "critica": true,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q2",
+      "descripcion": "% filas bronze descartadas (sin fecha prevista o duplicadas)",
+      "valor": 2.9482,
+      "umbral": "<= 5",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q3",
+      "descripcion": "duplicados por clave natural tras deduplicar",
+      "valor": 0,
+      "umbral": "= 0",
+      "cumple": true,
+      "critica": true,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q4",
+      "descripcion": "% REALIZADO sin partida real",
+      "valor": 0.0,
+      "umbral": "<= 2",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q5",
+      "descripcion": "% demoras atípicas fuera de [-60, 1440] min",
+      "valor": 0.1473,
+      "umbral": "<= 1",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q7",
+      "descripcion": "% vuelos cancelados (informativa)",
+      "valor": 3.1659,
+      "umbral": "informativa",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q8",
+      "descripcion": "% códigos ICAO de aeródromo inválidos",
+      "valor": 0.0,
+      "umbral": "<= 0.5",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q9",
+      "descripcion": "% vuelos del grupo LATAM (informativa)",
+      "valor": 32.0434,
+      "umbral": "informativa",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    },
+    {
+      "codigo": "Q10",
+      "descripcion": "nulos en columnas obligatorias del contrato",
+      "valor": 0,
+      "umbral": "= 0",
+      "cumple": true,
+      "critica": true,
+      "detalle": "{'id_vuelo': 0, 'empresa_icao': 0, 'es_latam': 0, 'numero_voo': 0, 'origen_icao': 0, 'destino_icao': 0, 'partida_prevista_local': 0, 'partida_prevista_utc': 0, 'cancelado': 0, 'es_atipico': 0, 'year': 0, 'month': 0}"
+    },
+    {
+      "codigo": "QB",
+      "descripcion": "% salidas con demora >= 15 min (línea base, informativa)",
+      "valor": 19.5247,
+      "umbral": "informativa",
+      "cumple": true,
+      "critica": false,
+      "detalle": ""
+    }
+  ],
+  "cumple_todo": true,
+  "desde": "2026-01",
+  "hasta": "2026-01",
+  "filas_bronze": 91650,
+  "pct_filas_ok": 99.8527,
+  "pct_calidad": 99.8527
+}

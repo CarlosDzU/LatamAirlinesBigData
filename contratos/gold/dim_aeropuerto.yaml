@@ -1,0 +1,16 @@
+nombre: dim_aeropuerto
+zona: gold
+descripcion: Aeródromos
+columnas:
+- nombre: origen_key
+  tipo: string
+- nombre: icao
+  tipo: string
+- nombre: pais_prefijo
+  tipo: string
+- nombre: es_brasil
+  tipo: boolean
+- nombre: es_hub
+  tipo: boolean
+- nombre: tiene_metar
+  tipo: boolean

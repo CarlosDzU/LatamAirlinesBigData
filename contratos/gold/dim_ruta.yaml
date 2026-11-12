@@ -1,0 +1,14 @@
+nombre: dim_ruta
+zona: gold
+descripcion: Rutas observadas
+columnas:
+- nombre: ruta_key
+  tipo: string
+- nombre: origen_icao
+  tipo: string
+- nombre: destino_icao
+  tipo: string
+- nombre: es_internacional
+  tipo: boolean
+- nombre: n_vuelos
+  tipo: long

@@ -1,0 +1,9 @@
+# Estado y artefactos locales de Terraform (nunca al repositorio)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl.bak

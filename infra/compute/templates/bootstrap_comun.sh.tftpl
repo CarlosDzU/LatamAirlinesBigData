@@ -1,0 +1,87 @@
+# ---------------------------------------------------------------------------
+# Bloque comun de arranque (master y workers). Idempotente: cada etapa deja una
+# marca en /var/lib/latam-ops y no se repite si ya termino. Log: /var/log/bootstrap.log
+# ---------------------------------------------------------------------------
+set -euo pipefail
+exec >>/var/log/bootstrap.log 2>&1
+echo "[bootstrap] inicio $(date -Is)"
+
+MARCAS=/var/lib/latam-ops
+mkdir -p "$MARCAS" /mnt/spark-tmp /var/log/latam-ops /opt/proyecto
+chown ec2-user:ec2-user /mnt/spark-tmp /var/log/latam-ops /opt/proyecto
+hecho()  { [ -f "$MARCAS/$1" ]; }
+marcar() { touch "$MARCAS/$1"; }
+descargar() { curl -fsSL --retry 5 --retry-delay 5 -o "$2" "$1"; }
+
+# 1. Paquetes del sistema (repositorios de AL2023 por HTTPS)
+if ! hecho paquetes; then
+  dnf install -y java-17-amazon-corretto-headless python3.11 python3.11-pip git jq
+  marcar paquetes
+fi
+
+# 2. Spark ${spark_version} con verificacion del SHA-512 publicado (fijado en Terraform)
+SPARK_VER="${spark_version}"
+SPARK_DIR="/opt/spark-$SPARK_VER-bin-hadoop3"
+if ! hecho "spark-$SPARK_VER"; then
+  cd /tmp
+  descargar "https://archive.apache.org/dist/spark/spark-$SPARK_VER/spark-$SPARK_VER-bin-hadoop3.tgz" "spark.tgz"
+  echo "${spark_sha512}  spark.tgz" | sha512sum -c -
+  tar -xzf spark.tgz -C /opt
+  ln -sfn "$SPARK_DIR" /opt/spark
+  rm -f spark.tgz
+  # Conector S3A (versiones compatibles con Hadoop 3.3.4 de Spark 3.5) con SHA-1 de Maven Central
+  descargar "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar" /opt/spark/jars/hadoop-aws-3.3.4.jar
+  echo "a65839fbf1869f81a1632e09f415e586922e4f80  /opt/spark/jars/hadoop-aws-3.3.4.jar" | sha1sum -c -
+  descargar "https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar" /opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
+  echo "02deec3a0ad83d13d032b1812421b23d7a961eea  /opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar" | sha1sum -c -
+  chown -R ec2-user:ec2-user "$SPARK_DIR"
+  marcar "spark-$SPARK_VER"
+fi
+
+# 3. Variables de entorno para todas las sesiones (SSM y systemd)
+cat > /etc/profile.d/latam_ops.sh <<'VARS'
+export LAKE_BUCKET="${bucket}"
+export AWS_REGION="${region}"
+export AWS_DEFAULT_REGION="${region}"
+export PROYECTO="${proyecto}"
+export SPARK_HOME=/opt/spark
+export PATH="/opt/spark/bin:/opt/spark/sbin:$PATH"
+export PYSPARK_PYTHON=python3.11
+export PYSPARK_DRIVER_PYTHON=python3.11
+export LATAM_LOG_DIR=/var/log/latam-ops
+VARS
+chmod 644 /etc/profile.d/latam_ops.sh
+set +u; . /etc/profile.d/latam_ops.sh; set -u
+
+# 4. Codigo del proyecto (lo publica `make sync` en s3://bucket/scripts/). Se reinstala en cada arranque.
+if aws s3 ls "s3://${bucket}/scripts/" >/dev/null 2>&1; then
+  aws s3 sync "s3://${bucket}/scripts/" /opt/proyecto/ --delete --only-show-errors
+  chown -R ec2-user:ec2-user /opt/proyecto
+  find /opt/proyecto/scripts -name '*.sh' -exec chmod 755 {} + 2>/dev/null || true
+  if [ -f /opt/proyecto/requirements.txt ]; then
+    python3.11 -m pip install --quiet -r /opt/proyecto/requirements.txt
+  fi
+  if [ -f /opt/proyecto/pyproject.toml ]; then
+    python3.11 -m pip install --quiet -e /opt/proyecto
+  fi
+else
+  echo "[bootstrap] AVISO: aun no hay codigo en s3://${bucket}/scripts/ (ejecutar make sync)"
+fi
+
+%{ if agente_cloudwatch ~}
+# 5. Agente de CloudWatch: envia logs de jobs, de Spark y de este arranque
+if ! hecho agente-cw; then
+  dnf install -y amazon-cloudwatch-agent
+  marcar agente-cw
+fi
+cat > /opt/aws/amazon-cloudwatch-agent/etc/latam-ops.json <<'CW'
+${config_agente}
+CW
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/latam-ops.json
+%{ endif ~}
+
+# Token IMDSv2 y datos de la instancia
+TOKEN=$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 300")
+IP_PRIVADA=$(curl -fsS -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4)
+echo "[bootstrap] comun listo; ip privada $IP_PRIVADA"

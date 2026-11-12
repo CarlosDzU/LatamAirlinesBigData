@@ -1,0 +1,8 @@
+nombre: metar_iem
+zona: bronze
+descripcion: "METAR crudo del archivo IEM (texto no estructurado), una fila por reporte, hora en UTC"
+formato: csv
+columnas:
+  - {nombre: station, tipo: string}
+  - {nombre: valid, tipo: string}
+  - {nombre: metar, tipo: string}

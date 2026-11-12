@@ -1,0 +1,369 @@
+{
+  "periodo_evaluado": "test 2025-01..2025-12",
+  "vuelos_evaluados": 302441,
+  "tasa_demora15_evaluada": 0.196,
+  "linea_base": {
+    "anio": 2025,
+    "vuelos_programados": 308610,
+    "vuelos_operados": 302441,
+    "tasa_salida_15": 0.196,
+    "tasa_salida_60": 0.0312,
+    "demora_media_min": 7.31,
+    "tasa_cancelacion": 0.0194,
+    "otp_llegada_cirium": 82.4,
+    "fuente_otp": "Cirium, The On-Time Performance Review 2025 (02-ene-2026): LATAM 82,40 % de llegadas a tiempo en 580 707 vuelos"
+  },
+  "supuestos": {
+    "costo_minuto_usd": 98.41,
+    "fuente_costo_minuto": "Airlines for America, U.S. Passenger Carrier Delay Costs (2025): costo directo promedio de un minuto de block time, US$ 98,41 (tripulación 37,01; combustible 29,34; mantenimiento 18,35; propiedad 9,76; otros 3,95). airlines.org/dataset/u-s-passenger-carrier-delay-costs, consultado el 11-nov-2026. Se usa como referencia porque LATAM no publica su costo por minuto; EUROCONTROL / Univ. de Westminster (Cook y Tanner, 2015) estima del orden de 100 EUR por minuto de demora ATFM en Europa.",
+    "escenarios": {
+      "pesimista": {
+        "fraccion_mitigable": 0.1,
+        "costo_accion_usd": 300
+      },
+      "base": {
+        "fraccion_mitigable": 0.2,
+        "costo_accion_usd": 150
+      },
+      "optimista": {
+        "fraccion_mitigable": 0.3,
+        "costo_accion_usd": 50
+      }
+    },
+    "nota_supuestos": "fraccion_mitigable (parte de la demora que se evita al actuar a T-2 h) y costo_accion_usd (revisar y preparar un vuelo alertado) son supuestos propios sin fuente pública para LATAM; se ajustan con el CCO. No se incluye el valor del tiempo del pasajero (A4A usa US$ 47 por hora) porque VRA no trae pasajeros por vuelo."
+  },
+  "umbral_principal": {
+    "objetivo": "y_demora15",
+    "razon_cfn_cfp": 5.0,
+    "umbral": 0.18,
+    "vp": 39165,
+    "fp": 83817,
+    "fn": 20116,
+    "vn": 159343,
+    "precision": 0.3185,
+    "recall": 0.6607,
+    "alertas_por_dia": 337.1,
+    "minutos_demora_vp": 1818789.0,
+    "minutos_demora_fn": 751734.0
+  },
+  "valor": [
+    {
+      "escenario": "pesimista",
+      "fraccion_mitigable": 0.1,
+      "costo_accion_usd": 300.0,
+      "alertas": 122982,
+      "vp": 39165,
+      "fp": 83817,
+      "minutos_evitados": 181878.9,
+      "ahorro_usd": 17898702.55,
+      "costo_alertas_usd": 36894600.0,
+      "beneficio_neto_usd": -18995897.45,
+      "roi": -0.515,
+      "objetivo": "y_demora15",
+      "umbral": 0.18,
+      "vuelos_recuperados": 3643,
+      "tasa_base": 0.196,
+      "tasa_tras_mitigar": 0.184,
+      "mejora_puntos_porcentuales": 1.2
+    },
+    {
+      "escenario": "base",
+      "fraccion_mitigable": 0.2,
+      "costo_accion_usd": 150.0,
+      "alertas": 122982,
+      "vp": 39165,
+      "fp": 83817,
+      "minutos_evitados": 363757.8,
+      "ahorro_usd": 35797405.1,
+      "costo_alertas_usd": 18447300.0,
+      "beneficio_neto_usd": 17350105.1,
+      "roi": 0.941,
+      "objetivo": "y_demora15",
+      "umbral": 0.18,
+      "vuelos_recuperados": 6898,
+      "tasa_base": 0.196,
+      "tasa_tras_mitigar": 0.1732,
+      "mejora_puntos_porcentuales": 2.28
+    },
+    {
+      "escenario": "optimista",
+      "fraccion_mitigable": 0.3,
+      "costo_accion_usd": 50.0,
+      "alertas": 122982,
+      "vp": 39165,
+      "fp": 83817,
+      "minutos_evitados": 545636.7,
+      "ahorro_usd": 53696107.65,
+      "costo_alertas_usd": 6149100.0,
+      "beneficio_neto_usd": 47547007.65,
+      "roi": 7.732,
+      "objetivo": "y_demora15",
+      "umbral": 0.18,
+      "vuelos_recuperados": 11186,
+      "tasa_base": 0.196,
+      "tasa_tras_mitigar": 0.159,
+      "mejora_puntos_porcentuales": 3.7
+    },
+    {
+      "escenario": "pesimista",
+      "fraccion_mitigable": 0.1,
+      "costo_accion_usd": 300.0,
+      "alertas": 5921,
+      "vp": 2334,
+      "fp": 3587,
+      "minutos_evitados": 43845.5,
+      "ahorro_usd": 4314835.66,
+      "costo_alertas_usd": 1776300.0,
+      "beneficio_neto_usd": 2538535.66,
+      "roi": 1.429,
+      "objetivo": "y_demora60",
+      "umbral": 0.11,
+      "vuelos_recuperados": 164,
+      "tasa_base": 0.0312,
+      "tasa_tras_mitigar": 0.0306,
+      "mejora_puntos_porcentuales": 0.05
+    },
+    {
+      "escenario": "base",
+      "fraccion_mitigable": 0.2,
+      "costo_accion_usd": 150.0,
+      "alertas": 5921,
+      "vp": 2334,
+      "fp": 3587,
+      "minutos_evitados": 87691.0,
+      "ahorro_usd": 8629671.31,
+      "costo_alertas_usd": 888150.0,
+      "beneficio_neto_usd": 7741521.31,
+      "roi": 8.716,
+      "objetivo": "y_demora60",
+      "umbral": 0.11,
+      "vuelos_recuperados": 362,
+      "tasa_base": 0.0312,
+      "tasa_tras_mitigar": 0.03,
+      "mejora_puntos_porcentuales": 0.12
+    },
+    {
+      "escenario": "optimista",
+      "fraccion_mitigable": 0.3,
+      "costo_accion_usd": 50.0,
+      "alertas": 5921,
+      "vp": 2334,
+      "fp": 3587,
+      "minutos_evitados": 131536.5,
+      "ahorro_usd": 12944506.96,
+      "costo_alertas_usd": 296050.0,
+      "beneficio_neto_usd": 12648456.96,
+      "roi": 42.724,
+      "objetivo": "y_demora60",
+      "umbral": 0.11,
+      "vuelos_recuperados": 552,
+      "tasa_base": 0.0312,
+      "tasa_tras_mitigar": 0.0293,
+      "mejora_puntos_porcentuales": 0.18
+    }
+  ],
+  "trazabilidad": [
+    {
+      "objetivo": "Avisar a T-2 h los vuelos con riesgo de salir con 15 min o más",
+      "hallazgo": "Al umbral elegido (C_FN/C_FP = 5.0) el modelo detecta 66.1 % de las demoras con precisión 31.9 % (337.1 alertas/día) en test 2025-01..2025-12",
+      "decision": "Usar la lista ámbar como cola priorizada de revisión del turno en SBGR y SBSP: avión o tripulación de reserva, re-protección de conexiones y aviso temprano a pasajeros",
+      "responsable": "Jefe de turno del CCO de LATAM Brasil",
+      "efecto": "Escenario base: 6898 vuelos dejan de salir con 15 min o más; la tasa pasa de 19.6 % a 17.3 %; beneficio neto US$ 17,350,105"
+    },
+    {
+      "objetivo": "Reducir la tasa de salidas con 15 min o más en los aeropuertos críticos",
+      "hallazgo": "SBGR tiene 29.9 % de salidas con 15 min o más frente a 19.6 % de la red (73222 vuelos)",
+      "decision": "Revisar holguras de rotación y recursos de rampa en SBGR en las franjas de mayor riesgo",
+      "responsable": "Gerencia de operaciones aeroportuarias del hub",
+      "efecto": "Hasta 7541 vuelos menos con 15 min o más si SBGR se lleva al promedio de la red"
+    },
+    {
+      "objetivo": "Ajustar la programación donde la demora se acumula",
+      "hallazgo": "La franja 18-23 h concentra 26.8 % de salidas con 15 min o más",
+      "decision": "Aumentar la holgura de giro en rotaciones que salen en la franja 18-23 h",
+      "responsable": "Planeamiento de red y programación",
+      "efecto": "Hasta 5420 vuelos menos con 15 min o más si la franja baja al promedio"
+    },
+    {
+      "objetivo": "Anticipar el efecto del clima reportado en el METAR",
+      "hallazgo": "Con niebla en el origen a T-2 h la tasa es 30.8 % frente a 18.7 % con tiempo VFR (1877 vuelos)",
+      "decision": "Protocolo de clima: si el METAR de T-2 h reporta niebla, pre-asignar recursos y avisar a pasajeros",
+      "responsable": "Despacho de vuelos y meteorología del CCO",
+      "efecto": "Prioriza 1877 salidas del periodo con riesgo 1.6 veces mayor"
+    },
+    {
+      "objetivo": "Cortar la propagación de demoras en la red",
+      "hallazgo": "Cuando >=50 % de las salidas previas del origen ya iban atrasadas, la tasa sube a 34.3 %",
+      "decision": "Alerta de red: si en [T-4 h, T-2 h) la fracción de salidas atrasadas supera 30 %, escalar al coordinador del hub",
+      "responsable": "Coordinador de hub del CCO",
+      "efecto": "Foco en 20154 salidas del periodo con el mayor riesgo observado"
+    },
+    {
+      "objetivo": "Mantener la calidad de la alerta en el tiempo",
+      "hallazgo": "Las métricas cambian por temporada y la red cambia (deriva medida con PSI)",
+      "decision": "Revisar cada mes el KPI K4 (precisión y recall de la alerta) y reentrenar si el recall baja de 0,60",
+      "responsable": "Analítica de operaciones",
+      "efecto": "Sostener el efecto estimado sobre la línea base de 19.6 % de salidas con 15 min o más"
+    }
+  ],
+  "hallazgos": {
+    "aeropuertos": [
+      {
+        "grupo": "SBGR",
+        "vuelos": 73222,
+        "tasa_demora15": 0.299
+      },
+      {
+        "grupo": "SBCF",
+        "vuelos": 6674,
+        "tasa_demora15": 0.2017
+      },
+      {
+        "grupo": "SBSP",
+        "vuelos": 39859,
+        "tasa_demora15": 0.1922
+      },
+      {
+        "grupo": "SBCT",
+        "vuelos": 7591,
+        "tasa_demora15": 0.1781
+      },
+      {
+        "grupo": "SCEL",
+        "vuelos": 6587,
+        "tasa_demora15": 0.1662
+      },
+      {
+        "grupo": "SBFL",
+        "vuelos": 6211,
+        "tasa_demora15": 0.1628
+      },
+      {
+        "grupo": "SBGO",
+        "vuelos": 4524,
+        "tasa_demora15": 0.1616
+      },
+      {
+        "grupo": "SBSV",
+        "vuelos": 7071,
+        "tasa_demora15": 0.155
+      },
+      {
+        "grupo": "SBGL",
+        "vuelos": 11923,
+        "tasa_demora15": 0.1516
+      },
+      {
+        "grupo": "SBRF",
+        "vuelos": 5198,
+        "tasa_demora15": 0.1483
+      },
+      {
+        "grupo": "SBPA",
+        "vuelos": 9266,
+        "tasa_demora15": 0.1457
+      },
+      {
+        "grupo": "SBVT",
+        "vuelos": 5255,
+        "tasa_demora15": 0.1248
+      },
+      {
+        "grupo": "SBBR",
+        "vuelos": 28790,
+        "tasa_demora15": 0.1181
+      },
+      {
+        "grupo": "SBFZ",
+        "vuelos": 9719,
+        "tasa_demora15": 0.1161
+      },
+      {
+        "grupo": "SBRJ",
+        "vuelos": 10010,
+        "tasa_demora15": 0.0978
+      }
+    ],
+    "franjas": [
+      {
+        "grupo": "18-23",
+        "vuelos": 75819,
+        "tasa_demora15": 0.2675
+      },
+      {
+        "grupo": "12-17",
+        "vuelos": 97391,
+        "tasa_demora15": 0.2198
+      },
+      {
+        "grupo": "06-11",
+        "vuelos": 97910,
+        "tasa_demora15": 0.1443
+      },
+      {
+        "grupo": "00-05",
+        "vuelos": 31321,
+        "tasa_demora15": 0.1106
+      }
+    ],
+    "clima": [
+      {
+        "grupo": "niebla",
+        "vuelos": 1877,
+        "tasa_demora15": 0.3079
+      },
+      {
+        "grupo": "tormenta",
+        "vuelos": 6554,
+        "tasa_demora15": 0.3036
+      },
+      {
+        "grupo": "lluvia",
+        "vuelos": 7977,
+        "tasa_demora15": 0.2819
+      },
+      {
+        "grupo": "IFR/LIFR sin niebla",
+        "vuelos": 22092,
+        "tasa_demora15": 0.2182
+      },
+      {
+        "grupo": "sin METAR",
+        "vuelos": 6947,
+        "tasa_demora15": 0.2164
+      },
+      {
+        "grupo": "VFR/MVFR sin fenómenos",
+        "vuelos": 256994,
+        "tasa_demora15": 0.1873
+      }
+    ],
+    "red": [
+      {
+        "grupo": ">=50 %",
+        "vuelos": 20154,
+        "tasa_demora15": 0.3433
+      },
+      {
+        "grupo": "30-50 %",
+        "vuelos": 28349,
+        "tasa_demora15": 0.3371
+      },
+      {
+        "grupo": "10-30 %",
+        "vuelos": 84079,
+        "tasa_demora15": 0.2284
+      },
+      {
+        "grupo": "sin salidas previas",
+        "vuelos": 49256,
+        "tasa_demora15": 0.1462
+      },
+      {
+        "grupo": "<10 %",
+        "vuelos": 120603,
+        "tasa_demora15": 0.136
+      }
+    ]
+  }
+}

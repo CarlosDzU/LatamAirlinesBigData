@@ -1,0 +1,7 @@
+grupo,vuelos,tasa_demora15
+niebla,1877,0.3079
+tormenta,6554,0.3036
+lluvia,7977,0.2819
+IFR/LIFR sin niebla,22092,0.2182
+sin METAR,6947,0.2164
+VFR/MVFR sin fenómenos,256994,0.1873

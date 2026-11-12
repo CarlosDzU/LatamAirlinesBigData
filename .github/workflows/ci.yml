@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check src tests scripts
+
+  pruebas:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen de pruebas (Python 3.11 + JDK 17 + PySpark 3.5)
+        run: docker compose -f docker/docker-compose.yml build tests
+      - name: Pruebas (parser METAR, UTC, as-of, propagación, anti-fuga, contratos, calidad, umbral, idempotencia)
+        run: docker compose -f docker/docker-compose.yml run --rm tests pytest -q
+      - name: Pipeline de punta a punta sobre la muestra real
+        run: docker compose -f docker/docker-compose.yml run --rm pipeline
+
+  terraform:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+      - name: fmt
+        run: terraform fmt -check -recursive infra
+      - name: validate (sin backend ni credenciales)
+        run: |
+          for stack in infra/base infra/compute; do
+            terraform -chdir=$stack init -backend=false -input=false
+            terraform -chdir=$stack validate
+          done

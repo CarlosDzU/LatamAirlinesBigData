@@ -1,0 +1,297 @@
+[
+    {
+        "t": "2026-11-11T21:22:03.692000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "NormalizarEntrada"
+    },
+    {
+        "t": "2026-11-11T21:22:03.692000-05:00",
+        "tipo": "PassStateEntered",
+        "estado": "DesdeEvento"
+    },
+    {
+        "t": "2026-11-11T21:22:03.692000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "BuscarMaster"
+    },
+    {
+        "t": "2026-11-11T21:22:04.024000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "HayMaster"
+    },
+    {
+        "t": "2026-11-11T21:22:04.024000-05:00",
+        "tipo": "PassStateEntered",
+        "estado": "PrepararPasos"
+    },
+    {
+        "t": "2026-11-11T21:22:04.024000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:22:24.251000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:22:24.422000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:22:24.422000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:22:44.663000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:22:44.827000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:22:44.827000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:23:05.107000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:23:05.253000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:23:25.294000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:23:25.420000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:23:45.465000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:23:45.569000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:05.615000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:05.731000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:25.776000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:25.983000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:25.983000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:24:46.229000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:24:46.359000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:06.422000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:06.586000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:26.630000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:26.802000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:26.802000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:25:47.006000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:25:47.134000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:07.174000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:07.294000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:27.335000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:27.453000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:47.502000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:47.673000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:26:47.673000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:27:07.852000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:27:07.973000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:27:28.019000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:27:28.173000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:27:48.214000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:27:48.324000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:08.368000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:08.488000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:28.534000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:28.697000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:28.697000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "EnviarComando"
+    },
+    {
+        "t": "2026-11-11T21:28:48.936000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:28:49.063000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:29:09.110000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:29:09.253000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:29:29.285000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "ConsultarEstado"
+    },
+    {
+        "t": "2026-11-11T21:29:29.482000-05:00",
+        "tipo": "ChoiceStateEntered",
+        "estado": "EvaluarEstado"
+    },
+    {
+        "t": "2026-11-11T21:29:29.482000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "Catalogar"
+    },
+    {
+        "t": "2026-11-11T21:29:29.982000-05:00",
+        "tipo": "TaskStateEntered",
+        "estado": "NotificarExito"
+    },
+    {
+        "t": "2026-11-11T21:29:30.198000-05:00",
+        "tipo": "ExecutionSucceeded",
+        "estado": null
+    }
+]

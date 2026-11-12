@@ -1,0 +1,201 @@
+{
+  "Comment": "Pipeline ${proyecto}: busca el master encendido, ejecuta cada paso con SSM Run Command (scripts/ejecutar_paso.sh), cataloga gold y notifica.",
+  "TimeoutSeconds": 14400,
+  "StartAt": "NormalizarEntrada",
+  "States": {
+    "NormalizarEntrada": {
+      "Type": "Choice",
+      "Choices": [
+        { "Variable": "$.detail.object.key", "IsPresent": true, "Next": "DesdeEvento" },
+        { "Variable": "$.objeto", "IsPresent": true, "Next": "DesdeManual" }
+      ],
+      "Default": "SinObjeto"
+    },
+    "DesdeEvento": {
+      "Type": "Pass",
+      "Parameters": { "objeto.$": "$.detail.object.key", "origen": "eventbridge" },
+      "Next": "BuscarMaster"
+    },
+    "DesdeManual": {
+      "Type": "Pass",
+      "Parameters": { "objeto.$": "$.objeto", "origen": "manual" },
+      "Next": "BuscarMaster"
+    },
+    "SinObjeto": {
+      "Type": "Pass",
+      "Parameters": { "objeto": "completo", "origen": "manual" },
+      "Next": "BuscarMaster"
+    },
+    "BuscarMaster": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:ec2:describeInstances",
+      "Parameters": {
+        "Filters": [
+          { "Name": "tag:Project", "Values": ["${proyecto}"] },
+          { "Name": "tag:Rol", "Values": ["master"] },
+          { "Name": "instance-state-name", "Values": ["running"] }
+        ]
+      },
+      "ResultSelector": { "reservas.$": "$.Reservations" },
+      "ResultPath": "$.master",
+      "Next": "HayMaster"
+    },
+    "HayMaster": {
+      "Type": "Choice",
+      "Choices": [
+        { "Variable": "$.master.reservas[0]", "IsPresent": true, "Next": "PrepararPasos" }
+      ],
+      "Default": "AvisarClusterApagado"
+    },
+    "AvisarClusterApagado": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "[${proyecto}] Pipeline no ejecutado: cluster apagado",
+        "Message.$": "States.Format('No hay master encendido. Objeto recibido: {}. Ejecutar make compute-up y relanzar.', $.objeto)"
+      },
+      "ResultPath": null,
+      "Next": "ClusterApagado"
+    },
+    "ClusterApagado": {
+      "Type": "Fail",
+      "Error": "ClusterApagado",
+      "Cause": "No hay instancia master en estado running con las etiquetas del proyecto."
+    },
+    "PrepararPasos": {
+      "Type": "Pass",
+      "Parameters": {
+        "objeto.$": "$.objeto",
+        "origen.$": "$.origen",
+        "instancia.$": "$.master.reservas[0].Instances[0].InstanceId",
+        "pasos": ${pasos}
+      },
+      "Next": "EjecutarPasos"
+    },
+    "EjecutarPasos": {
+      "Type": "Map",
+      "ItemsPath": "$.pasos",
+      "MaxConcurrency": 1,
+      "ItemSelector": {
+        "paso.$": "$$.Map.Item.Value",
+        "instancia.$": "$.instancia",
+        "objeto.$": "$.objeto"
+      },
+      "ItemProcessor": {
+        "ProcessorConfig": { "Mode": "INLINE" },
+        "StartAt": "EnviarComando",
+        "States": {
+          "EnviarComando": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::aws-sdk:ssm:sendCommand",
+            "Parameters": {
+              "DocumentName": "AWS-RunShellScript",
+              "InstanceIds.$": "States.Array($.instancia)",
+              "Comment.$": "States.Format('${proyecto} paso {}', $.paso)",
+              "Parameters": {
+                "commands.$": "States.Array(States.Format('sudo -u ec2-user -i /opt/proyecto/scripts/ejecutar_paso.sh {} {}', $.paso, $.objeto))",
+                "executionTimeout": ["7200"]
+              },
+              "CloudWatchOutputConfig": {
+                "CloudWatchOutputEnabled": true,
+                "CloudWatchLogGroupName": "${log_group_ssm}"
+              }
+            },
+            "ResultSelector": { "command_id.$": "$.Command.CommandId" },
+            "ResultPath": "$.cmd",
+            "Next": "Esperar"
+          },
+          "Esperar": {
+            "Type": "Wait",
+            "Seconds": 20,
+            "Next": "ConsultarEstado"
+          },
+          "ConsultarEstado": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::aws-sdk:ssm:getCommandInvocation",
+            "Parameters": {
+              "CommandId.$": "$.cmd.command_id",
+              "InstanceId.$": "$.instancia"
+            },
+            "ResultSelector": { "estado.$": "$.Status", "detalle.$": "$.StatusDetails" },
+            "ResultPath": "$.estado",
+            "Retry": [
+              {
+                "ErrorEquals": ["Ssm.InvocationDoesNotExistException"],
+                "IntervalSeconds": 5,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
+            "Next": "EvaluarEstado"
+          },
+          "EvaluarEstado": {
+            "Type": "Choice",
+            "Choices": [
+              { "Variable": "$.estado.estado", "StringEquals": "Success", "Next": "PasoOk" },
+              {
+                "Or": [
+                  { "Variable": "$.estado.estado", "StringEquals": "Pending" },
+                  { "Variable": "$.estado.estado", "StringEquals": "InProgress" },
+                  { "Variable": "$.estado.estado", "StringEquals": "Delayed" }
+                ],
+                "Next": "Esperar"
+              }
+            ],
+            "Default": "PasoFallido"
+          },
+          "PasoOk": { "Type": "Succeed" },
+          "PasoFallido": {
+            "Type": "Fail",
+            "Error": "PasoFallido",
+            "Cause": "El comando SSM del paso termino con estado distinto de Success (ver log group de SSM)."
+          }
+        }
+      },
+      "ResultPath": "$.resultados",
+      "Catch": [
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotificarFallo" }
+      ],
+      "Next": "Catalogar"
+    },
+    "Catalogar": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Parameters": { "Name": "${crawler_name}" },
+      "ResultPath": null,
+      "Catch": [
+        { "ErrorEquals": ["Glue.CrawlerRunningException"], "ResultPath": null, "Next": "NotificarExito" },
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotificarFallo" }
+      ],
+      "Next": "NotificarExito"
+    },
+    "NotificarExito": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "[${proyecto}] Pipeline completado",
+        "Message.$": "States.Format('Pipeline OK. objeto={} origen={} instancia={}', $.objeto, $.origen, $.instancia)"
+      },
+      "ResultPath": null,
+      "End": true
+    },
+    "NotificarFallo": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "[${proyecto}] Pipeline FALLIDO",
+        "Message.$": "States.JsonToString($)"
+      },
+      "ResultPath": null,
+      "Next": "Fallo"
+    },
+    "Fallo": {
+      "Type": "Fail",
+      "Error": "PipelineFallido",
+      "Cause": "Un paso del pipeline o la catalogacion fallo; detalle enviado por SNS."
+    }
+  }
+}

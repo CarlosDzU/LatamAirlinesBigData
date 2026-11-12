@@ -1,0 +1,115 @@
+nombre: features_salida
+zona: gold
+descripcion: Una fila por salida LATAM programada (no cancelada, no atípica). Solo
+  información disponible antes de T-2 h; las etiquetas y demora_salida_min no son
+  features.
+particiones:
+- year
+- month
+etiquetas:
+- y_demora15
+- y_demora60
+- demora_salida_min
+columnas:
+- nombre: id_vuelo
+  tipo: string
+  nulo: false
+- nombre: partida_prevista_utc
+  tipo: timestamp
+  nulo: false
+- nombre: t_ref_utc
+  tipo: timestamp
+  nulo: false
+- nombre: split
+  tipo: string
+  nulo: false
+- nombre: empresa_icao
+  tipo: string
+- nombre: origen_icao
+  tipo: string
+- nombre: destino_icao
+  tipo: string
+- nombre: tipo_linha
+  tipo: string
+- nombre: o_categoria_vuelo
+  tipo: string
+- nombre: hora_local
+  tipo: integer
+- nombre: dia_semana
+  tipo: integer
+- nombre: mes
+  tipo: integer
+- nombre: es_fin_de_semana
+  tipo: integer
+- nombre: congestion_hora_origen
+  tipo: long
+- nombre: congestion_dia_origen
+  tipo: long
+- nombre: red_n_salidas
+  tipo: long
+- nombre: red_demora_media
+  tipo: double
+- nombre: red_frac_atrasadas
+  tipo: double
+- nombre: red_n_llegadas_atrasadas
+  tipo: long
+- nombre: prev_dia_demora
+  tipo: double
+- nombre: prev_dia_conocido
+  tipo: integer
+- nombre: tasa_hist_origen_hora
+  tipo: double
+- nombre: o_viento_kt
+  tipo: integer
+- nombre: o_rafaga_kt
+  tipo: integer
+- nombre: o_vis_m
+  tipo: integer
+- nombre: o_techo_ft
+  tipo: integer
+- nombre: o_temp_c
+  tipo: integer
+- nombre: o_spread_t_td
+  tipo: integer
+- nombre: o_qnh_hpa
+  tipo: double
+- nombre: o_presion_tendencia_3h
+  tipo: double
+- nombre: o_fen_niebla
+  tipo: integer
+- nombre: o_fen_neblina
+  tipo: integer
+- nombre: o_fen_lluvia
+  tipo: integer
+- nombre: o_fen_tormenta
+  tipo: integer
+- nombre: o_tiene_tempo
+  tipo: integer
+- nombre: o_horas_desde_obs
+  tipo: double
+- nombre: d_viento_kt
+  tipo: integer
+- nombre: d_vis_m
+  tipo: integer
+- nombre: d_techo_ft
+  tipo: integer
+- nombre: d_fen_niebla
+  tipo: integer
+- nombre: d_fen_lluvia
+  tipo: integer
+- nombre: d_fen_tormenta
+  tipo: integer
+- nombre: clima_disponible
+  tipo: integer
+- nombre: demora_salida_min
+  tipo: double
+- nombre: y_demora15
+  tipo: integer
+- nombre: y_demora60
+  tipo: integer
+- nombre: year
+  tipo: integer
+  nulo: false
+- nombre: month
+  tipo: integer
+  nulo: false

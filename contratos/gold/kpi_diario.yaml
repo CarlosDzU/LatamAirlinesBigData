@@ -1,0 +1,31 @@
+nombre: kpi_diario
+zona: gold
+descripcion: KPI por fecha local y aeródromo de origen
+particiones:
+- year
+- month
+columnas:
+- nombre: fecha
+  tipo: date
+- nombre: origen_icao
+  tipo: string
+- nombre: salidas_programadas
+  tipo: long
+- nombre: salidas_realizadas
+  tipo: long
+- nombre: cancelaciones
+  tipo: long
+- nombre: k1_puntualidad
+  tipo: double
+- nombre: demora_media_min
+  tipo: double
+- nombre: k2_alertas_ambar
+  tipo: long
+- nombre: k2_alertas_rojas
+  tipo: long
+- nombre: k3_indice_propagacion
+  tipo: double
+- nombre: year
+  tipo: integer
+- nombre: month
+  tipo: integer

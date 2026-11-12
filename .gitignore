@@ -1,0 +1,46 @@
+
+# Secretos y credenciales
+.env
+*.pem
+*.key
+credentials*
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+.terraform.lock.hcl.bak
+crash.log
+
+# Datos (solo se versiona la muestra real pequeña)
+data/*
+!data/muestra/
+data/lake/
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Salidas locales
+docs/evidencias/local/
+powerbi_data/
+*.log
+
+# Sistema
+.DS_Store
+.idea/
+.vscode/

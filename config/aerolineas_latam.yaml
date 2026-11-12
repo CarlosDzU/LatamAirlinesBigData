@@ -1,0 +1,51 @@
+# Empresas del grupo LATAM Airlines presentes en ANAC VRA (campo "ICAO Empresa Aérea").
+# Verificado contra los archivos VRA 2023-01..2026-09 y la lista de miembros de IATA.
+# vuelos_vra = filas en VRA 2023-01..2026-09 (incluye cancelados).
+grupo_latam:
+  - icao: TAM
+    iata: JJ
+    nombre: LATAM Airlines Brasil
+    tipo: pasajeros
+    vuelos_vra: 1047787
+  - icao: LAN
+    iata: LA
+    nombre: LATAM Airlines Chile
+    tipo: pasajeros
+    vuelos_vra: 38987
+  - icao: LPE
+    iata: LP
+    nombre: LATAM Airlines Peru
+    tipo: pasajeros
+    vuelos_vra: 10309
+  - icao: LAP
+    iata: PZ
+    nombre: LATAM Airlines Paraguay
+    tipo: pasajeros
+    vuelos_vra: 4970
+  - icao: ARE
+    iata: 4C
+    nombre: LATAM Airlines Colombia
+    tipo: pasajeros
+    vuelos_vra: 2812
+  - icao: LNE
+    iata: XL
+    nombre: LATAM Airlines Ecuador
+    tipo: pasajeros
+    vuelos_vra: 1011
+  - icao: LTG
+    iata: M3
+    nombre: LATAM Cargo Brasil
+    tipo: carga
+    vuelos_vra: 16136
+  - icao: LCO
+    iata: UC
+    nombre: LATAM Cargo Chile
+    tipo: carga
+    vuelos_vra: 11454
+# Codigos historicos sin filas en el periodo: DSM (LATAM Argentina, cerro en 2020), LXP (LATAM Express).
+sin_filas_en_periodo: [DSM, LXP]
+# Por defecto el modelo usa solo pasajeros; las empresas de carga quedan fuera.
+tipos_incluidos_modelo: [pasajeros]
+# Zona horaria de Partida/Chegada Prevista y Real en VRA: horario de Brasilia (UTC-3, sin horario de verano desde 2019),
+# tambien en vuelos internacionales (verificado empiricamente).
+zona_horaria_vra: America/Sao_Paulo

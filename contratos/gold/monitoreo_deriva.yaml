@@ -1,0 +1,12 @@
+nombre: monitoreo_deriva
+zona: gold
+descripcion: PSI por feature entre train y un mes posterior
+columnas:
+- nombre: anio_mes
+  tipo: string
+- nombre: feature
+  tipo: string
+- nombre: psi
+  tipo: double
+- nombre: nivel
+  tipo: string
