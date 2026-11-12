@@ -9,7 +9,7 @@ TABLAS="fact_vuelo dim_fecha dim_aeropuerto dim_aerolinea dim_condicion_clima di
 mkdir -p "$DESTINO"
 if [[ "${LATAM_MODO:-aws}" == "aws" ]]; then
   for t in $TABLAS; do
-    aws s3 sync "s3://${LAKE_BUCKET:?defina LAKE_BUCKET}/gold/$t/" "$DESTINO/$t/" --only-show-errors --exclude '_*'
+    aws s3 sync "s3://${LAKE_BUCKET:?defina LAKE_BUCKET}/gold/$t/" "$DESTINO/$t/" --only-show-errors --exclude '_*' --delete
   done
   ORIGEN="$DESTINO"
 else
@@ -37,4 +37,12 @@ for t in tablas:
     (destino / "csv").mkdir(parents=True, exist_ok=True)
     df.to_csv(destino / "csv" / f"{t}.csv", index=False)
     print(f"[exportar] {t}: {len(df)} filas -> csv/{t}.csv")
+    if t == "fact_vuelo":
+        # Looker Studio acepta hasta 100 MB por archivo: solo los meses con predicción y las columnas del tablero
+        f = df[df.nivel_alerta.notna()].copy()
+        f["fecha"] = pd.to_datetime(f.fecha_key.astype(str), format="%Y%m%d").dt.strftime("%Y-%m-%d")
+        cols = ["fecha", "origen_key", "destino_key", "numero_voo", "hora_prog_local", "dep_delay_min", "es_demora15",
+                "es_demora60", "cancelado", "llegada_previa_atrasada", "prob_demora15", "prob_demora60", "nivel_alerta"]
+        f[cols].round(4).to_csv(destino / "csv" / "fact_vuelo_looker.csv", index=False)
+        print(f"[exportar] fact_vuelo_looker: {len(f)} filas -> csv/fact_vuelo_looker.csv")
 PY

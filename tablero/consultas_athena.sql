@@ -17,7 +17,7 @@ WHERE origen_icao = 'SBGR'
   AND year = (SELECT MAX(year) FROM kpi_diario)
 ORDER BY fecha;
 
--- K3 índice de propagación (la red ya venía atrasada)
+-- K3 índice de propagación: fracción de salidas ya atrasadas en el aeródromo en [T-4 h, T-2 h)
 SELECT origen_icao, ROUND(AVG(k3_indice_propagacion), 4) AS k3_promedio
 FROM kpi_diario
 GROUP BY origen_icao

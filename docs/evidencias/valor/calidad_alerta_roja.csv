@@ -1,0 +1,7 @@
+poblacion,split,vuelos,demoras60,alertas_rojas,vp,precision,recall
+grupo_con_carga,demo,27644,883,222,44,0.1982,0.0498
+grupo_con_carga,test,298585,7586,2017,504,0.2499,0.0664
+grupo_con_carga,valid,139293,3816,971,257,0.2647,0.0673
+solo_pasajeros,demo,27644,883,222,44,0.1982,0.0498
+solo_pasajeros,test,298585,7586,2017,504,0.2499,0.0664
+solo_pasajeros,valid,139293,3816,971,257,0.2647,0.0673

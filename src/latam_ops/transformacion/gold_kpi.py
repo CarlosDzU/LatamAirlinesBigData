@@ -2,8 +2,9 @@
 
 K1 puntualidad de salida = salidas realizadas con demora < 15 min / salidas realizadas.
 K2 alertas emitidas (ámbar y roja) por día y aeródromo.
-K3 índice de propagación = % de salidas atrasadas (>= 15) precedidas por llegadas atrasadas al mismo aeródromo
-   en las 2 h anteriores a T-2 h (la red ya venía atrasada).
+K3 índice de propagación = fracción media de salidas (de todas las empresas) que ya iban atrasadas en el aeródromo
+   en [T-4 h, T-2 h), vista desde cada salida LATAM del día. Antes se medía como "% de salidas atrasadas precedidas
+   por alguna llegada atrasada", pero en los hubs casi siempre hay alguna (SBGR ~97 %) y el indicador no se movía.
 K4 calidad de la alerta roja por mes: precisión y recall (requiere conocer el resultado real).
 
 Uso: python -m latam_ops.transformacion.gold_kpi --desde 2023-01 --hasta 2026-01
@@ -40,11 +41,9 @@ def kpi_diario(fact):
             F.avg(F.when(realizada, F.col("dep_delay_min"))).alias("demora_media_min"),
             F.sum((F.col("nivel_alerta") == "ambar").cast("long")).alias("k2_alertas_ambar"),
             F.sum((F.col("nivel_alerta") == "rojo").cast("long")).alias("k2_alertas_rojas"),
-            F.sum((F.col("es_demora15") == 1).cast("long")).alias("_atrasadas"),
-            F.sum(((F.col("es_demora15") == 1) & (F.col("llegada_previa_atrasada") == 1)).cast("long")).alias("_prop"),
+            F.avg("red_frac_atrasadas").alias("k3_indice_propagacion"),
         )
         .withColumn("k1_puntualidad", F.when(F.col("salidas_realizadas") > 0, F.col("_puntuales") / F.col("salidas_realizadas")))
-        .withColumn("k3_indice_propagacion", F.when(F.col("_atrasadas") > 0, F.col("_prop") / F.col("_atrasadas")))
         .withColumn("k2_alertas_ambar", F.coalesce("k2_alertas_ambar", F.lit(0)))
         .withColumn("k2_alertas_rojas", F.coalesce("k2_alertas_rojas", F.lit(0)))
         .withColumn("year", F.year("fecha")).withColumn("month", F.month("fecha"))

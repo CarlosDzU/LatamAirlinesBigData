@@ -1,0 +1,130 @@
+{
+  "y_demora15": {
+    "version": "20261112T053806Z",
+    "tipo": "random_forest",
+    "params": {
+      "numTrees": 100,
+      "maxDepth": 10
+    },
+    "valid": {
+      "auc_roc": 0.7224,
+      "auc_pr": 0.4066,
+      "umbral": 0.18,
+      "vp": 18645,
+      "fp": 45415,
+      "fn": 7320,
+      "vn": 67913,
+      "precision": 0.2911,
+      "recall": 0.7181,
+      "f1": 0.4142,
+      "exactitud": 0.6214,
+      "tasa_alerta": 0.4599
+    },
+    "test": {
+      "auc_roc": 0.7162,
+      "auc_pr": 0.3925,
+      "umbral": 0.18,
+      "vp": 36864,
+      "fp": 82630,
+      "fn": 19752,
+      "vn": 159339,
+      "precision": 0.3085,
+      "recall": 0.6511,
+      "f1": 0.4186,
+      "exactitud": 0.6571,
+      "tasa_alerta": 0.4002
+    },
+    "referencia_valid": {
+      "auc_roc": 0.6584,
+      "auc_pr": 0.2885,
+      "umbral": 0.1731,
+      "vp": 17012,
+      "fp": 48462,
+      "fn": 8953,
+      "vn": 64866,
+      "precision": 0.2598,
+      "recall": 0.6552,
+      "f1": 0.3721,
+      "exactitud": 0.5878,
+      "tasa_alerta": 0.47
+    }
+  },
+  "y_demora60": {
+    "version": "20261112T054728Z",
+    "tipo": "random_forest",
+    "params": {
+      "numTrees": 100,
+      "maxDepth": 10
+    },
+    "valid": {
+      "auc_roc": 0.7051,
+      "auc_pr": 0.0929,
+      "umbral": 0.13,
+      "vp": 257,
+      "fp": 714,
+      "fn": 3559,
+      "vn": 134763,
+      "precision": 0.2647,
+      "recall": 0.0673,
+      "f1": 0.1074,
+      "exactitud": 0.9693,
+      "tasa_alerta": 0.007
+    },
+    "test": {
+      "auc_roc": 0.6939,
+      "auc_pr": 0.0882,
+      "umbral": 0.13,
+      "vp": 504,
+      "fp": 1513,
+      "fn": 7082,
+      "vn": 289486,
+      "precision": 0.2499,
+      "recall": 0.0664,
+      "f1": 0.105,
+      "exactitud": 0.9712,
+      "tasa_alerta": 0.0068
+    },
+    "referencia_valid": {
+      "auc_roc": 0.6304,
+      "auc_pr": 0.0432,
+      "umbral": 0.0233,
+      "vp": 2539,
+      "fp": 62935,
+      "fn": 1277,
+      "vn": 72542,
+      "precision": 0.0388,
+      "recall": 0.6654,
+      "f1": 0.0733,
+      "exactitud": 0.539,
+      "tasa_alerta": 0.47
+    }
+  },
+  "alternativa_regresion": {
+    "modelo": "gbt_regresion_minutos",
+    "media_train": 5.345,
+    "valid": {
+      "modelo": {
+        "rmse": 21.725,
+        "mae": 12.332,
+        "r2": 0.088
+      },
+      "trivial_media": {
+        "rmse": 22.769,
+        "mae": 12.932,
+        "r2": -0.001
+      }
+    },
+    "test": {
+      "modelo": {
+        "rmse": 22.942,
+        "mae": 12.274,
+        "r2": -0.066
+      },
+      "trivial_media": {
+        "rmse": 22.231,
+        "mae": 12.871,
+        "r2": -0.001
+      }
+    }
+  }
+}

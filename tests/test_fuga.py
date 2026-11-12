@@ -32,3 +32,19 @@ def test_vector_de_features_sin_columnas_prohibidas(spark):
                     pass
     base = {c.removesuffix("_imp").removesuffix("_idx").removesuffix("_ohe") for c in entradas}
     assert not base & COLUMNAS_PROHIBIDAS
+
+
+def test_tasa_hist_fuera_de_muestra(silver_vuelos, clima_horario, cfg):
+    """La tasa histórica de un vuelo de train no puede usar su propio mes (codificación fuera de muestra)."""
+    from pyspark.sql import functions as F
+
+    from latam_ops.transformacion.gold_features import calcular_tasa_hist, construir_features
+
+    # Con train_fin = 2024-01 el único mes de train es el propio: no queda historia y la tasa es el prior.
+    tasa = calcular_tasa_hist(silver_vuelos, "2024-01")
+    prior = tasa.first()["prior"]
+    f = construir_features(silver_vuelos, clima_horario, cfg, tasa)
+    ene = f.where(F.date_format("partida_prevista_local", "yyyy-MM") == "2024-01")
+    assert ene.count() > 0
+    distintos = ene.where(F.abs(F.col("tasa_hist_origen_hora") - F.lit(prior)) > 1e-9).count()
+    assert distintos == 0

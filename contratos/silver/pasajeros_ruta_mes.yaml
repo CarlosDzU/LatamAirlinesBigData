@@ -1,0 +1,14 @@
+nombre: pasajeros_ruta_mes
+zona: silver
+descripcion: "Pasajeros, asientos y despegues de las empresas LATAM por ruta y mes (ANAC Dados Estatísticos, vuelos regulares)"
+columnas:
+  - {nombre: empresa_icao, tipo: string, nulo: false}
+  - {nombre: origen_icao, tipo: string, nulo: false}
+  - {nombre: destino_icao, tipo: string, nulo: false}
+  - {nombre: year, tipo: integer, nulo: false}
+  - {nombre: month, tipo: integer, nulo: false}
+  - {nombre: pasajeros, tipo: long}
+  - {nombre: asientos, tipo: long}
+  - {nombre: despegues, tipo: long}
+  - {nombre: pax_por_despegue, tipo: double}
+  - {nombre: asientos_por_despegue, tipo: double}

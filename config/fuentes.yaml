@@ -22,4 +22,13 @@ metar_iem:
   estaciones_base: [SBGR, SBSP, SBBR, SBGL, SBRJ, SBKP, SBCF, SBPA, SBCT, SBSV, SBRF, SBFZ, SBFL, SBEG, SBBE, SCEL, SPJC]
   licencia: "Datos públicos del archivo IEM; citar IEM y al servicio meteorológico de origen (DECEA/REDEMET)"
 
+anac_estatisticos:
+  activa: true
+  entidad: "ANAC - Agência Nacional de Aviação Civil (Brasil)"
+  descripcion: "Dados Estatísticos do Transporte Aéreo: pasajeros pagos, asientos y despegues por empresa, ruta y mes"
+  url_base: "https://sistemas.anac.gov.br/dadosabertos/Voos%20e%20opera%C3%A7%C3%B5es%20a%C3%A9reas/Dados%20Estat%C3%ADsticos%20do%20Transporte%20A%C3%A9reo"
+  separador: ";"
+  codificacion: utf-8-sig
+  licencia: "Datos abiertos ANAC; citar la fuente (gov.br/anac)"
+
 user_agent: "latam-ops-academic/1.0"

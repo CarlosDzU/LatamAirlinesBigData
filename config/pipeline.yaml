@@ -13,10 +13,12 @@ lake:
 tablas:
   bronze_vra: bronze/anac_vra
   bronze_metar: bronze/metar_iem
+  bronze_estatisticos: bronze/anac_estatisticos
   manifiestos: bronze/_manifests
   silver_vuelos: silver/vuelos
   silver_metar: silver/metar_obs
   silver_clima_horario: silver/clima_horario
+  silver_pasajeros: silver/pasajeros_ruta_mes
   silver_aeropuertos: silver/aeropuertos
   silver_calidad: silver/_calidad
   gold_features: gold/features_salida
@@ -118,22 +120,66 @@ evidencias:
 
 # Valor de negocio (ml/valor_negocio.py). Las cifras con fuente se citan; el resto son supuestos ajustables.
 valor_negocio:
-  razon_principal: 5               # razón C_FN/C_FP con la que opera la alerta ámbar
+  razon_principal: 5               # razón C_FN/C_FP con la que se fija el umbral en validación
+  # La ámbar con tope de capacidad es la que deja valor atribuible al modelo con intervalo lejos de cero; la roja
+  # acierta 4 veces más que la tabla pero son ~6 alertas al día y su valor absoluto es chico.
+  producto_principal: ambar
+  regla_principal: tope10          # umbral elegido en validación y como máximo 10 vuelos por aeropuerto y día
+  producto_complementario: rojo
+  regla_complementaria: umbral
   linea_base:
     otp_cirium_2025: 82.40
     fuente_otp: "Cirium, The On-Time Performance Review 2025 (02-ene-2026): LATAM 82,40 % de llegadas a tiempo en 580 707 vuelos"
-  costo_minuto_usd: 98.41
-  fuente_costo_minuto: >-
-    Airlines for America, U.S. Passenger Carrier Delay Costs (2025): costo directo promedio de un minuto de
-    block time, US$ 98,41 (tripulación 37,01; combustible 29,34; mantenimiento 18,35; propiedad 9,76; otros 3,95).
-    airlines.org/dataset/u-s-passenger-carrier-delay-costs, consultado el 11-nov-2026. Se usa como referencia
-    porque LATAM no publica su costo por minuto; EUROCONTROL / Univ. de Westminster (Cook y Tanner, 2015)
-    estima del orden de 100 EUR por minuto de demora ATFM en Europa.
+  # Cuánto le cuesta a la aerolínea un minuto de demora EN TIERRA (la acción ocurre antes del despegue).
+  costos_minuto:
+    brasil_operacional:
+      usd: 28.90
+      fuente: >-
+        Bendinelli, Bettini y Oliveira (2015), "Os custos diretos de voos que chegam atrasados em aeroportos
+        brasileiros", XIV SITRAER, ITA, Tabla 2: en 2010 el costo operacional de los atrasos en Brasil fue
+        US$ 165,4 M para 7,71 M minutos = US$ 21,46 por minuto (dólares de 2013). Actualizado a dólares de 2024
+        con el IPC de EE. UU. (BLS CPI-U promedio anual 313,689 / 232,957 = 1,3466).
+        https://repositorio.usp.br/bitstreams/30d65449-452b-492d-9523-fe90cabb9b80 (consultado el 12-nov-2026)
+    a4a_sin_combustible:
+      usd: 69.07
+      fuente: >-
+        Airlines for America, U.S. Passenger Carrier Delay Costs (2025): US$ 98,41 por minuto de block time,
+        de los que 29,34 son combustible. Con el avión en la puerta los motores están apagados, así que se
+        descuenta el combustible: tripulación 37,01 + mantenimiento 18,35 + propiedad 9,76 + otros 3,95.
+        https://www.airlines.org/dataset/u-s-passenger-carrier-delay-costs/ (consultado el 11-nov-2026)
+    a4a_block_completo:
+      usd: 98.41
+      fuente: >-
+        Airlines for America (2025), costo directo completo de un minuto de block time (cota alta para tierra).
+  # Referencias que no entran en la cuenta pero sirven para ubicar el orden de magnitud:
+  referencias_costo: >-
+    EUROCONTROL Standard Inputs for Economic Analyses, cap. 16 (Univ. de Westminster 2015 v4.1, precios de 2022):
+    demora táctica en puerta 166 EUR/min para todas las demoras y 45 EUR/min para demoras menores a 30 min,
+    incluyendo pasajeros y efecto red (https://ansperformance.eu/economics/cba/standard-inputs/latest/chapters/cost_of_delay.html).
+    EUROCONTROL CODA Digest Annual 2024: la demora reaccionaria (heredada del vuelo anterior) es el 46 % de los
+    minutos de demora en Europa (8,0 de 17,5 min por vuelo;
+    https://www.eurocontrol.int/archive_download/all/node/15406). Erdem y Bilgic (2024, J. Air Transport Management
+    115, 102548, doi:10.1016/j.jairtraman.2024.102548): re-programar 15 min e intercambiar aviones reduce hasta
+    90 % la propagación esperada (cota alta de planificación, no de operación a T-2 h).
+  # Una acción a T-2 h ahorra a lo sumo m minutos (min(demora, m)); no se le atribuye un % de la cola de 3 h.
   escenarios:
-    pesimista: {fraccion_mitigable: 0.10, costo_accion_usd: 300}
-    base: {fraccion_mitigable: 0.20, costo_accion_usd: 150}
-    optimista: {fraccion_mitigable: 0.30, costo_accion_usd: 50}
+    pesimista: {minutos_por_accion: 5, costo_minuto: brasil_operacional, costo_accion_usd: 300}
+    base: {minutos_por_accion: 10, costo_minuto: a4a_sin_combustible, costo_accion_usd: 150}
+    optimista: {minutos_por_accion: 20, costo_minuto: a4a_block_completo, costo_accion_usd: 50}
+  grilla_minutos_por_accion: [2, 5, 10, 15, 20, 30, 45, 60]
+  costos_accion_equilibrio: [50, 150, 300, 1500]
+  tope_minutos: 120                # para la fracción de equilibrio: minutos por vuelo recortados a 2 h
+  capacidad_cco:
+    k_por_aeropuerto_dia: [5, 10, 20, 40]
+  bootstrap: {repeticiones: 1000, semilla: 42, confianza: 0.95}
+  resolucion_anac_400: >-
+    Resolución ANAC 400/2016, art. 26-27: asistencia material gratuita según la espera: alimentación desde 2 h
+    y hospedaje y traslado desde 4 h (si hay pernocte). La comunicación a 1 h fue retirada por la Resolución 813.
+    La alerta se valora en pasajeros que dejan de cruzar las 2 h; no se monetiza porque el valor del voucher
+    no está regulado. https://www.anac.gov.br (texto vigente; en enero de 2026 se abrió consulta pública para revisarla)
   nota_supuestos: >-
-    fraccion_mitigable (parte de la demora que se evita al actuar a T-2 h) y costo_accion_usd (revisar y
-    preparar un vuelo alertado) son supuestos propios sin fuente pública para LATAM; se ajustan con el CCO.
-    No se incluye el valor del tiempo del pasajero (A4A usa US$ 47 por hora) porque VRA no trae pasajeros por vuelo.
+    minutos_por_accion y costo_accion_usd son supuestos propios: LATAM no publica cuánto cuesta ni cuánto ahorra
+    una acción preventiva. Por eso la cifra principal es el punto de equilibrio (minutos por acción y fracción
+    de la demora que hay que evitar para no perder) y la diferencia modelo - referencia con el mismo presupuesto.
+    El valor del tiempo del pasajero se reporta en minutos-pasajero (pasajeros por vuelo estimados con ANAC
+    Dados Estatísticos), sin pasarlo a dólares.

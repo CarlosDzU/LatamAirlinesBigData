@@ -35,6 +35,8 @@ columnas:
   tipo: integer
 - nombre: llegada_previa_atrasada
   tipo: integer
+- nombre: red_frac_atrasadas
+  tipo: double
 - nombre: prob_demora15
   tipo: double
 - nombre: prob_demora60

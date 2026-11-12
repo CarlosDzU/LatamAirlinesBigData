@@ -1,0 +1,31 @@
+tabla,grupo,vuelos_eda,vuelos_valor,tasa_eda,tasa_valor,coincide
+aeropuertos,SBGR,72769,72769,0.2977,0.2977,True
+aeropuertos,SBCF,6673,6673,0.2016,0.2016,True
+aeropuertos,SBSP,39859,39859,0.1922,0.1922,True
+aeropuertos,SBCT,7506,7506,0.1721,0.1721,True
+aeropuertos,SBGO,4524,4524,0.1616,0.1616,True
+aeropuertos,SCEL,6505,6505,0.1594,0.1594,True
+aeropuertos,SBSV,7070,7070,0.1549,0.1549,True
+aeropuertos,SBFL,6105,6105,0.1541,0.1541,True
+aeropuertos,SBGL,11883,11883,0.1495,0.1495,True
+aeropuertos,SBPA,9264,9264,0.1455,0.1455,True
+aeropuertos,SBRF,5164,5164,0.145,0.145,True
+aeropuertos,SBVT,5222,5222,0.1214,0.1214,True
+aeropuertos,SBBR,28758,28758,0.1173,0.1173,True
+aeropuertos,SBFZ,9708,9708,0.1156,0.1156,True
+aeropuertos,SBRJ,10010,10010,0.0978,0.0978,True
+franjas,18-23,75006,75006,0.2627,0.2627,True
+franjas,12-17,96514,96514,0.2149,0.2149,True
+franjas,06-11,96732,96732,0.1381,0.1381,True
+franjas,00-05,30333,30333,0.0927,0.0927,True
+clima,tormenta,6473,6473,0.2999,0.2999,True
+clima,niebla,1824,1824,0.2971,0.2971,True
+clima,lluvia,7896,7896,0.2775,0.2775,True
+clima,IFR/LIFR sin niebla,21899,21899,0.2145,0.2145,True
+clima,VFR/MVFR sin fenómenos,254298,254298,0.182,0.182,True
+clima,sin METAR,6195,6195,0.1558,0.1558,True
+red,>=50 %,19737,19737,0.3368,0.3368,True
+red,30-50 %,28100,28100,0.3344,0.3344,True
+red,10-30 %,83501,83501,0.2256,0.2256,True
+red,<10 %,119738,119738,0.132,0.132,True
+red,sin salidas previas,47509,47509,0.1247,0.1247,True

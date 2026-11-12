@@ -13,7 +13,7 @@ from pyspark.sql import DataFrame, SparkSession, Window
 from pyspark.sql import functions as F
 
 from latam_ops.comun.calidad import Regla, pct, publicar_reporte
-from latam_ops.comun.config import cargar_yaml, lake
+from latam_ops.comun.config import cargar_yaml, empresas_modelo, lake
 from latam_ops.comun.contratos import aplicar_contrato
 from latam_ops.comun.corridas import registrar_corrida
 from latam_ops.comun.log import obtener_logger
@@ -74,15 +74,19 @@ def _unir_ventana(base: DataFrame, agregado: DataFrame, columnas: list[str], hor
     return unido.groupBy("id_vuelo").agg(*[F.sum(c).alias(c) for c in columnas])
 
 
-def construir_features(vuelos: DataFrame, clima: DataFrame | None, cfg: dict, tasa_hist: DataFrame | None = None) -> DataFrame:
+def construir_features(vuelos: DataFrame, clima: DataFrame | None, cfg: dict, tasa_hist: DataFrame | None = None,
+                       empresas: list[str] | None = None) -> DataFrame:
     """Construye features_salida (función pura; los vuelos deben incluir el contexto de días previos).
 
     vuelos: silver/vuelos (todas las empresas). clima: silver/clima_horario (o None).
     tasa_hist: (origen_icao, hora_local, tasa_hist_origen_hora) calculada solo con train.
+    empresas: empresas LATAM que se modelan (por defecto las de `tipos_incluidos_modelo`, sin carga). El estado de
+    la red y la congestión siguen usando todos los vuelos del aeropuerto.
     """
+    empresas = empresas if empresas is not None else empresas_modelo()
     horizonte = int(cfg["horizonte_horas"])
     ventana = int(cfg["ventana_red_horas"])
-    latam = vuelos.where("es_latam")
+    latam = vuelos.where("es_latam").where(F.col("empresa_icao").isin(empresas))
     base = (
         latam.withColumn("t_ref_utc", F.col("partida_prevista_utc") - F.expr(f"INTERVAL {horizonte} HOURS"))
         .withColumn("kr", F.date_trunc("hour", "t_ref_utc"))
@@ -150,7 +154,7 @@ def construir_features(vuelos: DataFrame, clima: DataFrame | None, cfg: dict, ta
     base = base.withColumn("clima_disponible", F.col("o_obs_utc").isNotNull().cast("int"))
     # Codificación histórica (solo train) por origen y hora local.
     if tasa_hist is not None:
-        base = base.join(tasa_hist, ["origen_icao", "hora_local"], "left")
+        base = _unir_tasa_hist(base, tasa_hist)
     else:
         base = base.withColumn("tasa_hist_origen_hora", F.lit(None).cast("double"))
     anio_mes = F.date_format("partida_prevista_local", "yyyy-MM")
@@ -159,18 +163,46 @@ def construir_features(vuelos: DataFrame, clima: DataFrame | None, cfg: dict, ta
     return base.where(~F.col("cancelado") & ~F.col("es_atipico") & F.col("y_demora15").isNotNull())
 
 
-def calcular_tasa_hist(vuelos: DataFrame, train_fin: str, suavizado: int = 20) -> DataFrame | None:
-    """Tasa de demora >= 15 por (origen, hora local) con suavizado bayesiano, usando solo meses de train."""
+def calcular_tasa_hist(vuelos: DataFrame, train_fin: str, suavizado: int = 20,
+                       empresas: list[str] | None = None) -> DataFrame | None:
+    """Conteos de demora >= 15 por (origen, hora local, mes) de los meses de train, para la codificación histórica.
+
+    Se guardan por mes para que cada vuelo de train reciba la tasa calculada SIN su propio mes (fuera de muestra);
+    los vuelos de valid, test y demo reciben la tasa con todo el train. Así el modelo no aprende de una variable
+    que contiene su propia etiqueta.
+    """
+    empresas = empresas if empresas is not None else empresas_modelo()
+    anio_mes = F.date_format("partida_prevista_local", "yyyy-MM")
     train = vuelos.where("es_latam AND y_demora15 IS NOT NULL AND NOT es_atipico").where(
-        F.date_format("partida_prevista_local", "yyyy-MM") <= train_fin)
+        F.col("empresa_icao").isin(empresas)).where(anio_mes <= train_fin)
     if train.limit(1).count() == 0:
         return None
     global_ = train.agg(F.avg("y_demora15")).first()[0]
     return (
-        train.groupBy("origen_icao", F.hour("partida_prevista_local").alias("hora_local"))
-        .agg(F.sum("y_demora15").alias("s"), F.count("*").alias("n"))
-        .withColumn("tasa_hist_origen_hora", (F.col("s") + F.lit(global_ * suavizado)) / (F.col("n") + F.lit(suavizado)))
-        .select("origen_icao", "hora_local", "tasa_hist_origen_hora")
+        train.groupBy("origen_icao", F.hour("partida_prevista_local").alias("hora_local"), anio_mes.alias("anio_mes"))
+        .agg(F.sum("y_demora15").alias("s_mes"), F.count("*").alias("n_mes"))
+        .withColumn("prior", F.lit(float(global_))).withColumn("suavizado", F.lit(float(suavizado)))
+    )
+
+
+def _unir_tasa_hist(base: DataFrame, tasa_hist: DataFrame) -> DataFrame:
+    """tasa = (s - s_mes_propio + prior * a) / (n - n_mes_propio + a), con suavizado bayesiano.
+
+    Fuera de train no hay mes propio en los conteos y queda la tasa con todo el train.
+    """
+    tot = tasa_hist.groupBy("origen_icao", "hora_local").agg(
+        F.sum("s_mes").alias("_s"), F.sum("n_mes").alias("_n"), F.first("prior").alias("_p"),
+        F.first("suavizado").alias("_a"))
+    propio = tasa_hist.select("origen_icao", "hora_local", F.col("anio_mes").alias("_am"),
+                              F.col("s_mes").alias("_sm"), F.col("n_mes").alias("_nm"))
+    s = F.col("_s") - F.coalesce(F.col("_sm"), F.lit(0))
+    n = F.col("_n") - F.coalesce(F.col("_nm"), F.lit(0))
+    return (
+        base.withColumn("_am", F.date_format("partida_prevista_local", "yyyy-MM"))
+        .join(tot, ["origen_icao", "hora_local"], "left")
+        .join(propio, ["origen_icao", "hora_local", "_am"], "left")
+        .withColumn("tasa_hist_origen_hora", ((s + F.col("_p") * F.col("_a")) / (n + F.col("_a"))).cast("double"))
+        .drop("_am", "_s", "_n", "_p", "_a", "_sm", "_nm")
     )
 
 

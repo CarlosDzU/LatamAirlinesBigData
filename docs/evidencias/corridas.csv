@@ -25,3 +25,26 @@ ts_inicio,run_id,modo,paso,estado,filas_entrada,filas_salida,segundos,detalle
 2026-11-12T02:26:54+00:00,20261112T022650Z-27b2eb,aws,gold_dimensional,ok,,28495,66.18,
 2026-11-12T02:28:01+00:00,20261112T022650Z-27b2eb,aws,gold_kpi,ok,,2539,17.39,
 2026-11-12T02:28:36+00:00,20261112T022831Z-80fd35,aws,valor_negocio,ok,302441,,43.39,beneficio neto base US$ 17350105.1
+2026-11-12T04:40:30+00:00,20261112T044028Z-a58755,local,valor_negocio,error,,,19.14,AttributeError: module 'latam_ops.ml.politicas_alerta' has no attribute 'tasa_tras_actuar'
+2026-11-12T04:40:59+00:00,20261112T044057Z-81d24d,local,valor_negocio,ok,298585,,25.54,"rojo top10: beneficio base 8070567 US$, incremento vs referencia -159621 US$"
+2026-11-12T04:43:08+00:00,20261112T044306Z-a05993,local,valor_negocio,ok,298585,,47.13,"rojo tope10: beneficio base 432724 US$, incremento vs referencia 190564 US$"
+2026-11-12T04:45:04+00:00,20261112T044503Z-377440,local,valor_negocio,ok,298585,,45.34,"ambar tope10: beneficio base 8201566 US$, incremento vs referencia 1849764 US$"
+2026-11-12T05:09:01+00:00,20261112T050901Z-b2e430,local,ingesta_estatisticos,ok,,1102985,0.79,bronze/anac_estatisticos/ingest_date=2026-11-12/Dados_Estatisticos.csv (nuevo)
+2026-11-12T05:09:04+00:00,20261112T050902Z-657cab,local,silver_pasajeros,ok,,18901,7.4,bronze/anac_estatisticos/ingest_date=2026-11-12/Dados_Estatisticos.csv; 165362950 pasajeros en 1078307 despegues
+2026-11-12T05:09:20+00:00,20261112T050918Z-91a14d,local,valor_negocio,ok,298585,,50.9,"ambar tope10: beneficio base 8201566 US$, incremento vs referencia 1849764 US$"
+2026-11-12T05:20:25+00:00,20261112T052020Z-3059b7,aws,silver_pasajeros,ok,,15029,54.75,bronze/anac_estatisticos/ingest_date=2026-11-12/Dados_Estatisticos.csv; 132438549 pasajeros en 865679 despegues
+2026-11-12T05:21:27+00:00,20261112T052122Z-55ef4c,aws,gold_features,ok,,832186,131.86,2023-01..2025-12
+2026-11-12T05:24:02+00:00,20261112T052356Z-4943ef,aws,modelo_base,ok,394308,,159.58,AUC valid ref=0.6584 lr=0.7159
+2026-11-12T05:26:49+00:00,20261112T052644Z-d09ec8,aws,modelo_final,ok,394308,,1331.22,"{""y_demora15"": ""random_forest"", ""y_demora60"": ""random_forest""}"
+2026-11-12T05:49:36+00:00,20261112T054931Z-6f6d8d,aws,predecir,ok,,465641,98.74,
+2026-11-12T05:51:23+00:00,20261112T055118Z-b7be41,aws,gold_dimensional,ok,,861194,103.26,
+2026-11-12T05:53:06+00:00,20261112T055118Z-b7be41,aws,gold_kpi,ok,,83906,46.96,
+2026-11-12T05:54:00+00:00,20261112T055355Z-734e2c,aws,deriva,ok,,646,249.65,
+2026-11-12T05:58:19+00:00,20261112T055814Z-22b2c8,aws,valor_negocio,ok,298585,,127.0,"ambar tope10: beneficio base 8411924 US$, incremento vs referencia 1968909 US$"
+2026-11-12T06:01:52+00:00,20261112T060148Z-a914e4,aws,silver_vuelos,ok,91650,88948,37.06,2026-01..2026-01
+2026-11-12T06:02:30+00:00,20261112T060148Z-a914e4,aws,silver_metar,ok,612719,69814,45.41,2026-01..2026-01; parseados 97.194%
+2026-11-12T06:03:33+00:00,20261112T060329Z-8673b8,aws,gold_features,ok,,27644,52.48,2026-01..2026-01
+2026-11-12T06:04:35+00:00,20261112T060430Z-76ea24,aws,predecir,ok,,465522,62.3,
+2026-11-12T06:05:55+00:00,20261112T060550Z-6e9145,aws,gold_dimensional,ok,,28495,64.11,
+2026-11-12T06:06:59+00:00,20261112T060550Z-6e9145,aws,gold_kpi,ok,,2539,16.59,
+2026-11-12T06:07:36+00:00,20261112T060732Z-193b8f,aws,valor_negocio,ok,298585,,132.01,"ambar tope10: beneficio base 8411924 US$, incremento vs referencia 1968909 US$"

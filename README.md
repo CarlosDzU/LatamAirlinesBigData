@@ -12,37 +12,41 @@ hacer: avión o tripulación de reserva, re-protección de conexiones o aviso a 
 
 | Referencia | Valor | Fuente |
 |---|---|---|
-| Puntualidad de llegada de LATAM en 2025 | 82,40 % | Cirium, On-Time Performance Review 2025 |
-| Salidas de LATAM en Brasil con 15 min o más (2025) | 19,6 % de 302 441 vuelos operados | ANAC VRA, medido en este proyecto |
-| Costo directo de un minuto de operación | US$ 98,41 | Airlines for America, 2025 |
+| Puntualidad de llegada de LATAM en 2025 (todo el grupo) | 82,40 % | Cirium, On-Time Performance Review 2025 |
+| Puntualidad de llegada de LATAM pasajeros en Brasil (2025) | 82,17 % | ANAC VRA, medido en este proyecto |
+| Salidas de LATAM pasajeros en Brasil con 15 min o más (2025) | 18,96 % de 298 585 vuelos operados | ANAC VRA, medido en este proyecto |
+| Costo directo de un minuto de demora en tierra | US$ 69,07 (A4A 2025 sin combustible); US$ 28,90 (Brasil, 2010 actualizado) | Airlines for America; Bendinelli et al., SITRAER 2015 |
 
-Resultados en el test (todo 2025, 302 441 salidas operadas). El modelo se entrenó en el clúster de AWS con todo el
-periodo de entrenamiento (2023-01 a 2024-06) y los hiperparámetros se eligieron en validación (2024-07 a 2024-12):
+Resultados en el test (todo 2025). El modelo se entrenó en el clúster de AWS con todo el periodo de entrenamiento
+(2023-01 a 2024-06) y los hiperparámetros se eligieron en validación (2024-07 a 2024-12):
 
 | Modelo | AUC-ROC | AUC-PR |
 |---|---|---|
-| Referencia: tasa histórica por aeropuerto y hora (≥ 15 min) | 0,652 | 0,295 |
-| Regresión logística (≥ 15 min) | 0,715 | 0,393 |
-| Random Forest, 100 árboles, profundidad 10 (≥ 15 min) | 0,721 | 0,416 |
-| Referencia (≥ 60 min) | 0,626 | 0,054 |
-| Random Forest, 100 árboles, profundidad 10 (≥ 60 min) | 0,748 | 0,201 |
+| Referencia: tasa histórica por aeropuerto y hora (≥ 15 min) | 0,653 | 0,288 |
+| Regresión logística (≥ 15 min) | 0,709 | 0,376 |
+| Random Forest, 100 árboles, profundidad 10 (≥ 15 min) | 0,716 | 0,393 |
+| Referencia (≥ 60 min) | 0,615 | 0,038 |
+| Random Forest, 100 árboles, profundidad 10 (≥ 60 min) | 0,694 | 0,088 |
 
-Con el umbral elegido en validación para un costo de demora no avisada cinco veces mayor que el de una falsa
-alarma, la alerta ámbar detecta el 66 % de las salidas con 15 min o más (precisión 32 %, unas 340 alertas por día
-en toda la red) y la roja el 25 % de las de 60 min o más (precisión 39 %, unas 16 alertas por día). Traducido a
-costo operativo en 2025:
+El valor se mide contra la referencia y no contra "no hacer nada": con el mismo número de vuelos revisados por
+aeropuerto, ¿cuánto más deja el modelo que una tabla de tasas por aeropuerto y hora? Solo empresas de pasajeros,
+test 2025, escenario base (cada acción ahorra hasta 10 min, US$ 69,07 por minuto, US$ 150 por acción), intervalos
+de confianza del 95 % por bootstrap de días:
 
-| Escenario | Demora evitable al actuar | Costo por vuelo revisado | Beneficio neto alerta ámbar | Beneficio neto alerta roja | Salidas con 15 min o más |
+| Lista | Alertas por día | Precisión modelo / tabla | Beneficio neto | Atribuible al modelo | Se paga si cada acción ahorra |
 |---|---|---|---|---|---|
-| Pesimista | 10 % | US$ 300 | −US$ 19,0 M | US$ 2,5 M | 19,6 % → 18,4 % |
-| Base | 20 % | US$ 150 | US$ 17,4 M | US$ 7,7 M | 19,6 % → 17,3 % |
-| Optimista | 30 % | US$ 50 | US$ 47,5 M | US$ 12,6 M | 19,6 % → 15,9 % |
+| Ámbar, máximo 10 por aeropuerto y día | 145 | 27,7 % / 23,6 % | US$ 8,4 M | US$ 1,97 M (1,64–2,27) | 4,3 min |
+| Roja (60 min o más) | 5,5 | 25,0 % / 6,0 % | US$ 0,8 M | US$ 0,30 M (0,03–0,63) | 2,5 min |
 
-La alerta roja es rentable en los tres escenarios. La ámbar solo lo es si revisar cada vuelo cuesta poco, por eso
-se propone usarla como cola priorizada y no como acción automática. Hallazgos que concentran el riesgo en 2025:
-Guarulhos (SBGR) con 29,9 % de salidas con 15 min o más frente a 19,6 % de la red; la franja de 18 a 23 h con
-26,8 %; niebla (30,8 %), tormenta (30,4 %) y lluvia (28,2 %) en el METAR del origen frente a 18,7 % con tiempo
-despejado; y 34,3 % cuando la mitad o más de las salidas previas del aeropuerto ya iban atrasadas.
+En el escenario pesimista (5 min por acción, US$ 28,90 por minuto, US$ 300 por acción) ninguna lista se paga. La
+alerta roja detecta pocas demoras de 60 min o más en vuelos de pasajeros: 6,6 % en 2025 y 5,0 % en enero de 2026
+(cuando el modelo incluía a LATAM Cargo parecía detectar 24,8 %, pero casi todos esos aciertos eran cargueros); sirve
+como lista corta de alta precisión, no como red de seguridad. En
+SBGR y SBSP la alerta ámbar empata con la tabla: ahí manda la rotación del avión, que VRA no trae. Con la lista
+ámbar, las salidas con 15 min o más pasarían de 18,96 % a 17,10 % en el escenario base. Hallazgos que concentran el
+riesgo en 2025: la franja de 18 a 23 h (26,3 % de salidas con 15 min o más), tormenta en el METAR del origen
+(30,0 % frente a 18,2 % con tiempo despejado) y 33,7 % cuando la mitad o más de las salidas previas del aeropuerto
+ya iban atrasadas.
 
 ### Ejecución en AWS (12-nov-2026)
 
@@ -54,13 +58,16 @@ silver con un archivo por partición pasó de más de 15 min (miles de archivos 
 Escalabilidad del pipeline de features: 1 mes 19 s, 1 año 42 s, 3 años 79 s, 10× (9,6 M vuelos) 209 s; la réplica
 100× (95,6 M vuelos) no terminó en 60 min con dos nodos. En una sola máquina con pandas, 10× ya ocupa 5,4 de 7,8 GB
 de RAM, así que 100× no cabe en una máquina. La demo subió enero de 2026 a `bronze/landing/`: EventBridge lanzó
-Step Functions y el mes llegó a gold y a Athena en 7,5 min. Costo estimado de toda la corrida: alrededor de US$ 1.
+Step Functions y el mes llegó a gold y a Athena en 8,8 min (28 495 vuelos, 222 alertas rojas). El mismo día se
+reentrenó sin LATAM Cargo: features en 2 min, modelo base en 3 min, modelo final en 21 min y el resto de la cadena en
+12 min. Costo estimado de las dos corridas: alrededor de US$ 1,5.
 Las evidencias están en `docs/evidencias/`.
 
-Los supuestos (costo por minuto, fracción de demora evitable al actuar a tiempo y costo de revisar un vuelo
-alertado) están en `config/pipeline.yaml`, en el bloque `valor_negocio`, y se pueden ajustar con el CCO. El detalle
-por escenario, la sensibilidad del umbral, los hallazgos y la tabla de trazabilidad están en
-`docs/evidencias/valor/` y en `notebooks/04_valor_negocio.ipynb`.
+Los supuestos (costo por minuto con su fuente, minutos que ahorra una acción y costo de cada acción) están en
+`config/pipeline.yaml`, en el bloque `valor_negocio`, y se pueden ajustar con el CCO. El valor incremental, la
+capacidad por aeropuerto y día, el punto de equilibrio, los intervalos de confianza, la sensibilidad del umbral, los
+hallazgos y la tabla de trazabilidad están en `docs/evidencias/valor/` y en `notebooks/04_valor_negocio.ipynb`. Las
+métricas de la tabla de modelos y del valor son de la corrida en AWS del 12-nov-2026, solo con empresas de pasajeros.
 
 ## Arquitectura
 

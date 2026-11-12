@@ -79,6 +79,21 @@ def empresas_latam() -> list[str]:
     return list(cargar_yaml("fuentes")["anac_vra"]["empresas_latam_respaldo"])
 
 
+def empresas_modelo() -> list[str]:
+    """Empresas LATAM que entran al modelo y al cálculo de valor según `tipos_incluidos_modelo` (por defecto
+    solo pasajeros: la carga no tiene pasajeros que avisar ni conexiones que re-proteger)."""
+    archivo = ruta_repo("config", "aerolineas_latam.yaml")
+    if not archivo.exists():
+        return empresas_latam()
+    with open(archivo, encoding="utf-8") as f:
+        datos = yaml.safe_load(f) or {}
+    tipos = set(datos.get("tipos_incluidos_modelo") or [])
+    grupo = datos.get("grupo_latam") or []
+    if not tipos or not grupo:
+        return empresas_latam()
+    return sorted({e["icao"].upper() for e in grupo if isinstance(e, dict) and e.get("tipo") in tipos})
+
+
 def _extraer_codigos(datos: Any) -> list[str]:
     """Extrae códigos ICAO de 3 letras de un YAML con estructura flexible."""
     codigos: list[str] = []

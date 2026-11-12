@@ -126,6 +126,12 @@ def ejecutar(paso: str, desde: str, hasta: str, origen: str = "http", dir_raw: s
         vra.main(["--desde", desde, "--hasta", hasta, *extra])
     elif paso == "ingesta_metar":
         metar.main(["--desde", desde, "--hasta", hasta, *extra])
+    elif paso == "ingesta_estatisticos":
+        from latam_ops.conectores import estatisticos
+        estatisticos.main(extra)
+    elif paso == "silver_pasajeros":
+        from latam_ops.transformacion import silver_pasajeros
+        silver_pasajeros.ejecutar(desde, hasta)
     elif paso == "silver_vuelos":
         from latam_ops.transformacion import silver_vuelos
         silver_vuelos.ejecutar(desde, hasta)
@@ -179,8 +185,8 @@ def ejecutar(paso: str, desde: str, hasta: str, origen: str = "http", dir_raw: s
         if os.environ.get("LATAM_MODO") == "aws":
             catalogar()
     elif paso == "todo":
-        for p in ("ingesta_vra", "ingesta_metar", "silver_vuelos", "silver_metar", "gold_features", "modelo_base",
-                  "modelo_final"):
+        for p in ("ingesta_vra", "ingesta_metar", "ingesta_estatisticos", "silver_vuelos", "silver_metar",
+                  "silver_pasajeros", "gold_features", "modelo_base", "modelo_final"):
             ejecutar(p, desde, hasta, origen, dir_raw)
         demo = cargar_yaml("pipeline")["periodo"]["demo"]
         for p in ("predecir", "kpi"):

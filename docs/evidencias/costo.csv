@@ -6,4 +6,8 @@ Glue crawler,2,ejecuciones,0.15,0.29,minimo facturable 10 min a 0.44 USD/DPU-h (
 Athena,0.002,TB escaneados,5.00,0.01,consultas de validacion y tablero
 S3 almacenamiento y solicitudes,2.4,GB,0.023,0.10,incluye copias del commit de E5 (5 GB temporales borrados)
 CloudWatch, Step Functions, EventBridge, SNS,1,mes,0.00,0.00,dentro de la capa gratuita
-TOTAL estimado,,,,1.00,Cost Explorer no esta habilitado en la cuenta; cifra estimada por horas de uso. Credito del plan Free intacto en la consola (120 USD)
+Re-corrida EC2 m7i-flex.large (master + 1 worker),1.94,horas-instancia,0.0958,0.19,2 nodos de 05:14 a 06:12 UTC del 12-nov (reentrenamiento solo pasajeros y demo)
+Re-corrida IPv4 publica,1.94,horas-IP,0.005,0.01,una IP por nodo
+Re-corrida Glue crawler,2,ejecuciones,0.15,0.29,catalogar y demo (estimado)
+Re-corrida S3 y Athena,0.4,GB,0.023,0.02,Dados Estatisticos (361 MB) y consultas de validacion
+TOTAL estimado,,,,1.51,Cost Explorer no esta habilitado en la cuenta; cifra estimada por horas de uso de las dos corridas. Credito del plan Free en la consola: 120 USD

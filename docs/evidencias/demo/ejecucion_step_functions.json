@@ -1,6 +1,7 @@
 {
-    "estado": "SUCCEEDED",
-    "inicio": "2026-11-11T21:22:03.670000-05:00",
-    "fin": "2026-11-11T21:29:30.198000-05:00",
-    "entrada": "{\"version\":\"0\",\"id\":\"daa4b3d9-f5e0-48ea-ccd9-e292e99c86f2\",\"detail-type\":\"Object Created\",\"source\":\"aws.s3\",\"account\":\"848994702864\",\"time\":\"2026-11-12T02:22:02Z\",\"region\":\"us-east-1\",\"resources\":[\"arn:aws:s3:::latam-ops-lake-9c5b0760\"],\"detail\":{\"version\":\"0\",\"event-version\":\"1.2\",\"bucket\":{\"name\":\"latam-ops-lake-9c5b0760\"},\"object\":{\"key\":\"bronze/landing/anac_vra/VRA_20261.csv\",\"size\":13008603,\"etag\":\"c2d822ae81c086b2b86c73dae2aa275a-2\",\"version-id\":\"Ou3wVzdBgafCrv9xcORVnDgvmaEfN9sR\",\"sequencer\":\"006AF522C3B5FF743C\"},\"request-id\":\"M829FM37026DC52Z\",\"requester\":\"848994702864\",\"source-ip-address\":\"179.6.26.147\",\"reason\":\"CompleteMultipartUpload\"}}"
+    "name": "5d65cee5-527e-df82-07e5-1f4089eaa486_feb65b30-a1ab-e09e-174f-c1d482b6fdbd",
+    "status": "SUCCEEDED",
+    "startDate": "2026-11-12T01:01:04.704000-05:00",
+    "stopDate": "2026-11-12T01:09:51.347000-05:00",
+    "input": "{\"version\":\"0\",\"id\":\"5d65cee5-527e-df82-07e5-1f4089eaa486\",\"detail-type\":\"Object Created\",\"source\":\"aws.s3\",\"account\":\"848994702864\",\"time\":\"2026-11-12T06:01:03Z\",\"region\":\"us-east-1\",\"resources\":[\"arn:aws:s3:::latam-ops-lake-9c5b0760\"],\"detail\":{\"version\":\"0\",\"event-version\":\"1.2\",\"bucket\":{\"name\":\"latam-ops-lake-9c5b0760\"},\"object\":{\"key\":\"bronze/landing/anac_vra/VRA_20261.csv\",\"size\":13008603,\"etag\":\"c2d822ae81c086b2b86c73dae2aa275a-2\",\"version-id\":\"tMU8u68UQXHzgFVNXYlbjUSifBE3D7Re\",\"sequencer\":\"006AF5561B221B2D2E\"},\"request-id\":\"S75QTDX027SC40DN\",\"requester\":\"848994702864\",\"source-ip-address\":\"179.6.26.147\",\"reason\":\"CompleteMultipartUpload\"}}"
 }

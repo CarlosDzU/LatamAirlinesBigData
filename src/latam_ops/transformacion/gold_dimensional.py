@@ -33,9 +33,11 @@ def construir_fact(vuelos: DataFrame, features: DataFrame | None, pred: DataFram
     """fact_vuelo: todas las salidas LATAM (incluidas canceladas) con su predicción si existe."""
     f = vuelos.where("es_latam")
     if features is not None:
-        f = f.join(features.select("id_vuelo", "red_n_llegadas_atrasadas", "o_categoria_vuelo"), "id_vuelo", "left")
+        f = f.join(features.select("id_vuelo", "red_n_llegadas_atrasadas", "red_frac_atrasadas", "o_categoria_vuelo"),
+                   "id_vuelo", "left")
     else:
-        f = f.withColumn("red_n_llegadas_atrasadas", F.lit(None)).withColumn("o_categoria_vuelo", F.lit(None))
+        f = (f.withColumn("red_n_llegadas_atrasadas", F.lit(None)).withColumn("red_frac_atrasadas", F.lit(None))
+             .withColumn("o_categoria_vuelo", F.lit(None)))
     if pred is not None:
         f = f.join(pred.select("id_vuelo", "prob_demora15", "prob_demora60", "nivel_alerta"), "id_vuelo", "left")
     else:

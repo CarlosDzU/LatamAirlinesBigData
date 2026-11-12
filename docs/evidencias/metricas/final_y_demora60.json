@@ -1,0 +1,454 @@
+{
+  "nombre": "final_y_demora60",
+  "version": "20261112T054728Z",
+  "run_id": "20261112T052644Z-d09ec8",
+  "registrado_utc": "2026-11-12T05:48:12.348532+00:00",
+  "objetivo": "y_demora60",
+  "tipo": "random_forest",
+  "params": {
+    "numTrees": 100,
+    "maxDepth": 10
+  },
+  "filas": {
+    "train": 394308,
+    "valid": 139293,
+    "test": 298585,
+    "demo": 27763
+  },
+  "busqueda": [
+    {
+      "tipo": "random_forest",
+      "params": {
+        "numTrees": 50,
+        "maxDepth": 6
+      },
+      "auc_roc": 0.696,
+      "auc_pr": 0.0884
+    },
+    {
+      "tipo": "random_forest",
+      "params": {
+        "numTrees": 50,
+        "maxDepth": 10
+      },
+      "auc_roc": 0.7047,
+      "auc_pr": 0.0926
+    },
+    {
+      "tipo": "random_forest",
+      "params": {
+        "numTrees": 100,
+        "maxDepth": 6
+      },
+      "auc_roc": 0.6954,
+      "auc_pr": 0.0922
+    },
+    {
+      "tipo": "random_forest",
+      "params": {
+        "numTrees": 100,
+        "maxDepth": 10
+      },
+      "auc_roc": 0.7051,
+      "auc_pr": 0.0929
+    },
+    {
+      "tipo": "gbt",
+      "params": {
+        "maxIter": 40,
+        "maxDepth": 5,
+        "stepSize": 0.1
+      },
+      "auc_roc": 0.7037,
+      "auc_pr": 0.0734
+    },
+    {
+      "tipo": "gbt",
+      "params": {
+        "maxIter": 80,
+        "maxDepth": 5,
+        "stepSize": 0.1
+      },
+      "auc_roc": 0.7046,
+      "auc_pr": 0.0737
+    }
+  ],
+  "umbrales_por_costo": [
+    {
+      "razon_cfn_cfp": 3,
+      "umbral": 0.17,
+      "umbral_teorico": 0.25,
+      "costo": 11287.0,
+      "vp": 151,
+      "fp": 292,
+      "fn": 3665,
+      "vn": 135185
+    },
+    {
+      "razon_cfn_cfp": 5,
+      "umbral": 0.13,
+      "umbral_teorico": 0.1667,
+      "costo": 18509.0,
+      "vp": 257,
+      "fp": 714,
+      "fn": 3559,
+      "vn": 134763
+    },
+    {
+      "razon_cfn_cfp": 10,
+      "umbral": 0.08,
+      "umbral_teorico": 0.0909,
+      "costo": 35774.0,
+      "vp": 558,
+      "fp": 3194,
+      "fn": 3258,
+      "vn": 132283
+    }
+  ],
+  "umbrales": {
+    "ratio5": 0.13
+  },
+  "metricas": {
+    "valid": {
+      "auc_roc": 0.7051,
+      "auc_pr": 0.0929,
+      "umbral": 0.13,
+      "vp": 257,
+      "fp": 714,
+      "fn": 3559,
+      "vn": 134763,
+      "precision": 0.2647,
+      "recall": 0.0673,
+      "f1": 0.1074,
+      "exactitud": 0.9693,
+      "tasa_alerta": 0.007
+    },
+    "test": {
+      "auc_roc": 0.6939,
+      "auc_pr": 0.0882,
+      "umbral": 0.13,
+      "vp": 504,
+      "fp": 1513,
+      "fn": 7082,
+      "vn": 289486,
+      "precision": 0.2499,
+      "recall": 0.0664,
+      "f1": 0.105,
+      "exactitud": 0.9712,
+      "tasa_alerta": 0.0068
+    },
+    "test_por_segmento": [
+      {
+        "segmento": "aeropuertos_top10",
+        "auc_roc": 0.7022,
+        "auc_pr": 0.0889,
+        "umbral": 0.13,
+        "vp": 358,
+        "fp": 1260,
+        "fn": 4663,
+        "vn": 197219,
+        "precision": 0.2213,
+        "recall": 0.0713,
+        "f1": 0.1078,
+        "exactitud": 0.9709,
+        "tasa_alerta": 0.008
+      },
+      {
+        "segmento": "aeropuertos_resto",
+        "auc_roc": 0.6742,
+        "auc_pr": 0.0896,
+        "umbral": 0.13,
+        "vp": 146,
+        "fp": 253,
+        "fn": 2419,
+        "vn": 92267,
+        "precision": 0.3659,
+        "recall": 0.0569,
+        "f1": 0.0985,
+        "exactitud": 0.9719,
+        "tasa_alerta": 0.0042
+      },
+      {
+        "segmento": "empresa_ARE",
+        "auc_roc": 0.6172,
+        "auc_pr": 0.1139,
+        "umbral": 0.13,
+        "vp": 3,
+        "fp": 22,
+        "fn": 41,
+        "vn": 1222,
+        "precision": 0.12,
+        "recall": 0.0682,
+        "f1": 0.087,
+        "exactitud": 0.9511,
+        "tasa_alerta": 0.0194
+      },
+      {
+        "segmento": "empresa_LPE",
+        "auc_roc": 0.6123,
+        "auc_pr": 0.0913,
+        "umbral": 0.13,
+        "vp": 3,
+        "fp": 11,
+        "fn": 126,
+        "vn": 2719,
+        "precision": 0.2143,
+        "recall": 0.0233,
+        "f1": 0.042,
+        "exactitud": 0.9521,
+        "tasa_alerta": 0.0049
+      },
+      {
+        "segmento": "empresa_LAN",
+        "auc_roc": 0.5925,
+        "auc_pr": 0.0528,
+        "umbral": 0.13,
+        "vp": 10,
+        "fp": 37,
+        "fn": 311,
+        "vn": 10587,
+        "precision": 0.2128,
+        "recall": 0.0312,
+        "f1": 0.0543,
+        "exactitud": 0.9682,
+        "tasa_alerta": 0.0043
+      },
+      {
+        "segmento": "empresa_LAP",
+        "auc_roc": 0.7047,
+        "auc_pr": 0.1354,
+        "umbral": 0.13,
+        "vp": 4,
+        "fp": 14,
+        "fn": 58,
+        "vn": 1206,
+        "precision": 0.2222,
+        "recall": 0.0645,
+        "f1": 0.1,
+        "exactitud": 0.9438,
+        "tasa_alerta": 0.014
+      },
+      {
+        "segmento": "empresa_TAM",
+        "auc_roc": 0.6924,
+        "auc_pr": 0.0795,
+        "umbral": 0.13,
+        "vp": 377,
+        "fp": 1295,
+        "fn": 6545,
+        "vn": 273749,
+        "precision": 0.2255,
+        "recall": 0.0545,
+        "f1": 0.0877,
+        "exactitud": 0.9722,
+        "tasa_alerta": 0.0059
+      },
+      {
+        "segmento": "empresa_LNE",
+        "auc_roc": 0.5271,
+        "auc_pr": 0.4697,
+        "umbral": 0.13,
+        "vp": 107,
+        "fp": 134,
+        "fn": 1,
+        "vn": 3,
+        "precision": 0.444,
+        "recall": 0.9907,
+        "f1": 0.6132,
+        "exactitud": 0.449,
+        "tasa_alerta": 0.9837
+      }
+    ]
+  },
+  "referencia": {
+    "modelo": "referencia_tasa_historica",
+    "objetivo": "y_demora60",
+    "tasa_positiva_train": 0.0233,
+    "valid": {
+      "auc_roc": 0.6304,
+      "auc_pr": 0.0432,
+      "umbral": 0.0233,
+      "vp": 2539,
+      "fp": 62935,
+      "fn": 1277,
+      "vn": 72542,
+      "precision": 0.0388,
+      "recall": 0.6654,
+      "f1": 0.0733,
+      "exactitud": 0.539,
+      "tasa_alerta": 0.47
+    },
+    "test": {
+      "auc_roc": 0.6154,
+      "auc_pr": 0.038,
+      "umbral": 0.0233,
+      "vp": 5042,
+      "fp": 143321,
+      "fn": 2544,
+      "vn": 147678,
+      "precision": 0.034,
+      "recall": 0.6646,
+      "f1": 0.0647,
+      "exactitud": 0.5115,
+      "tasa_alerta": 0.4969
+    }
+  },
+  "importancias": [
+    {
+      "feature": "destino_icao",
+      "importancia": 0.11311
+    },
+    {
+      "feature": "tasa_hist_origen_hora",
+      "importancia": 0.06049
+    },
+    {
+      "feature": "prev_dia_demora",
+      "importancia": 0.05731
+    },
+    {
+      "feature": "red_frac_atrasadas",
+      "importancia": 0.05643
+    },
+    {
+      "feature": "red_demora_media",
+      "importancia": 0.05431
+    },
+    {
+      "feature": "origen_icao",
+      "importancia": 0.04485
+    },
+    {
+      "feature": "o_qnh_hpa",
+      "importancia": 0.04044
+    },
+    {
+      "feature": "congestion_dia_origen",
+      "importancia": 0.03849
+    },
+    {
+      "feature": "d_viento_kt",
+      "importancia": 0.03787
+    },
+    {
+      "feature": "o_vis_m",
+      "importancia": 0.03625
+    },
+    {
+      "feature": "o_viento_kt",
+      "importancia": 0.03363
+    },
+    {
+      "feature": "red_n_llegadas_atrasadas",
+      "importancia": 0.03286
+    },
+    {
+      "feature": "hora_local",
+      "importancia": 0.03197
+    },
+    {
+      "feature": "mes",
+      "importancia": 0.03166
+    },
+    {
+      "feature": "o_temp_c",
+      "importancia": 0.02983
+    },
+    {
+      "feature": "o_presion_tendencia_3h",
+      "importancia": 0.02524
+    },
+    {
+      "feature": "congestion_hora_origen",
+      "importancia": 0.0237
+    },
+    {
+      "feature": "o_spread_t_td",
+      "importancia": 0.02333
+    },
+    {
+      "feature": "o_fen_tormenta",
+      "importancia": 0.02188
+    },
+    {
+      "feature": "o_techo_ft",
+      "importancia": 0.02106
+    },
+    {
+      "feature": "tipo_linha",
+      "importancia": 0.02079
+    },
+    {
+      "feature": "o_rafaga_kt",
+      "importancia": 0.02014
+    },
+    {
+      "feature": "red_n_salidas",
+      "importancia": 0.01988
+    },
+    {
+      "feature": "d_techo_ft",
+      "importancia": 0.01961
+    },
+    {
+      "feature": "o_horas_desde_obs",
+      "importancia": 0.01755
+    },
+    {
+      "feature": "dia_semana",
+      "importancia": 0.01594
+    },
+    {
+      "feature": "d_vis_m",
+      "importancia": 0.01513
+    },
+    {
+      "feature": "empresa_icao",
+      "importancia": 0.01108
+    },
+    {
+      "feature": "d_fen_tormenta",
+      "importancia": 0.0091
+    },
+    {
+      "feature": "o_categoria_vuelo",
+      "importancia": 0.00848
+    },
+    {
+      "feature": "o_fen_lluvia",
+      "importancia": 0.00708
+    },
+    {
+      "feature": "o_fen_neblina",
+      "importancia": 0.00533
+    },
+    {
+      "feature": "d_fen_lluvia",
+      "importancia": 0.00526
+    },
+    {
+      "feature": "prev_dia_conocido",
+      "importancia": 0.00308
+    },
+    {
+      "feature": "es_fin_de_semana",
+      "importancia": 0.00263
+    },
+    {
+      "feature": "o_fen_niebla",
+      "importancia": 0.00118
+    },
+    {
+      "feature": "d_fen_niebla",
+      "importancia": 0.00114
+    },
+    {
+      "feature": "clima_disponible",
+      "importancia": 0.00114
+    },
+    {
+      "feature": "o_tiene_tempo",
+      "importancia": 0.00075
+    }
+  ]
+}

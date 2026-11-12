@@ -1,0 +1,43 @@
+nombre: anac_estatisticos
+zona: bronze
+descripcion: "CSV ANAC Dados Estatísticos do Transporte Aéreo tal como se publica (separador ';', UTF-8 con BOM, primera línea 'Atualizado em'); todo como texto"
+formato: csv
+columnas:
+  - {nombre: empresa_sigla, tipo: string, origen: "EMPRESA_SIGLA"}
+  - {nombre: empresa_nome, tipo: string, origen: "EMPRESA_NOME"}
+  - {nombre: empresa_nacionalidade, tipo: string, origen: "EMPRESA_NACIONALIDADE"}
+  - {nombre: ano, tipo: string, origen: "ANO"}
+  - {nombre: mes, tipo: string, origen: "MES"}
+  - {nombre: aeroporto_de_origem_sigla, tipo: string, origen: "AEROPORTO_DE_ORIGEM_SIGLA"}
+  - {nombre: aeroporto_de_origem_nome, tipo: string, origen: "AEROPORTO_DE_ORIGEM_NOME"}
+  - {nombre: aeroporto_de_origem_uf, tipo: string, origen: "AEROPORTO_DE_ORIGEM_UF"}
+  - {nombre: aeroporto_de_origem_regiao, tipo: string, origen: "AEROPORTO_DE_ORIGEM_REGIAO"}
+  - {nombre: aeroporto_de_origem_pais, tipo: string, origen: "AEROPORTO_DE_ORIGEM_PAIS"}
+  - {nombre: aeroporto_de_origem_continente, tipo: string, origen: "AEROPORTO_DE_ORIGEM_CONTINENTE"}
+  - {nombre: aeroporto_de_destino_sigla, tipo: string, origen: "AEROPORTO_DE_DESTINO_SIGLA"}
+  - {nombre: aeroporto_de_destino_nome, tipo: string, origen: "AEROPORTO_DE_DESTINO_NOME"}
+  - {nombre: aeroporto_de_destino_uf, tipo: string, origen: "AEROPORTO_DE_DESTINO_UF"}
+  - {nombre: aeroporto_de_destino_regiao, tipo: string, origen: "AEROPORTO_DE_DESTINO_REGIAO"}
+  - {nombre: aeroporto_de_destino_pais, tipo: string, origen: "AEROPORTO_DE_DESTINO_PAIS"}
+  - {nombre: aeroporto_de_destino_continente, tipo: string, origen: "AEROPORTO_DE_DESTINO_CONTINENTE"}
+  - {nombre: natureza, tipo: string, origen: "NATUREZA"}
+  - {nombre: grupo_de_voo, tipo: string, origen: "GRUPO_DE_VOO"}
+  - {nombre: passageiros_pagos, tipo: string, origen: "PASSAGEIROS_PAGOS"}
+  - {nombre: passageiros_gratis, tipo: string, origen: "PASSAGEIROS_GRATIS"}
+  - {nombre: carga_paga_kg, tipo: string, origen: "CARGA_PAGA_KG"}
+  - {nombre: carga_gratis_kg, tipo: string, origen: "CARGA_GRATIS_KG"}
+  - {nombre: correio_kg, tipo: string, origen: "CORREIO_KG"}
+  - {nombre: ask, tipo: string, origen: "ASK"}
+  - {nombre: rpk, tipo: string, origen: "RPK"}
+  - {nombre: atk, tipo: string, origen: "ATK"}
+  - {nombre: rtk, tipo: string, origen: "RTK"}
+  - {nombre: combustivel_litros, tipo: string, origen: "COMBUSTIVEL_LITROS"}
+  - {nombre: distancia_voada_km, tipo: string, origen: "DISTANCIA_VOADA_KM"}
+  - {nombre: decolagens, tipo: string, origen: "DECOLAGENS"}
+  - {nombre: carga_paga_km, tipo: string, origen: "CARGA_PAGA_KM"}
+  - {nombre: carga_gratis_km, tipo: string, origen: "CARGA_GRATIS_KM"}
+  - {nombre: correio_km, tipo: string, origen: "CORREIO_KM"}
+  - {nombre: assentos, tipo: string, origen: "ASSENTOS"}
+  - {nombre: payload, tipo: string, origen: "PAYLOAD"}
+  - {nombre: horas_voadas, tipo: string, origen: "HORAS_VOADAS"}
+  - {nombre: bagagem_kg, tipo: string, origen: "BAGAGEM_KG"}
